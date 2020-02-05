@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         LoadUI();
         gameLoaded = true;
 
-
+        Debug.Log(sessionData.stageCurrentMonster);
         GameObject playerPrefab = Resources.Load("Prefabs/Player") as GameObject;
         GameObject playerSpawn = Camera.main.transform.Find("Canvas").Find("PlayerSpawn").Find("Spawn").gameObject;
 
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     public Transform respawnPos;
     public void spawnMonster()
     {
-        if (sessionData.stageCurrentMonster == 1)
+        if (sessionData.stageCurrentMonster == 1 | respawnPos == null)
         { // Spawn first monster in the walking-spawn point further out
             GameObject monsterSpawn = Camera.main.transform.Find("Canvas").Find("MonsterSpawn").Find("Spawn").gameObject;
             GameObject monster = Instantiate(monsterAPrefab, monsterSpawn.transform.position, monsterSpawn.transform.rotation, monsterSpawn.transform); // Spawn the first player
@@ -102,6 +102,11 @@ public class GameManager : MonoBehaviour
             sessionData.stageCurrentMonster = 1;
             spawnMonster();
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveManager.SaveData(this.GetComponent<SessionData>());
     }
 }
 
