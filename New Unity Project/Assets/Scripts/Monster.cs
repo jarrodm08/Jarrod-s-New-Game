@@ -48,19 +48,15 @@ public class Monster : MonoBehaviour
         {
             monsterCurrentHP -= sessionData.playerDPS;
             monsterAnimator.Play("damage", 0, 0);
-            Debug.Log(monsterCurrentHP);
 
         }
         else
         {
-            Debug.Log(monsterCurrentHP);
             monsterCurrentHP = 0;
             monsterAnimator.Play("death", 0, 0);
             this.GetComponent<Image>().CrossFadeAlpha(0f,1f,false);
             Invoke("monsterDeath",1f);
         }
-        
-        
     }
 
     private void monsterDeath()

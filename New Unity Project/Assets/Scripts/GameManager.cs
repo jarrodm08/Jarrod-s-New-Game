@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI displayPlayerDPS;
     private TextMeshProUGUI displayHeroDPS;
 
+    private Button[] panelBtns;
+
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnLevelFinishedLoading; // Disable the listner for scene changes
@@ -51,12 +54,24 @@ public class GameManager : MonoBehaviour
 
     private void LoadUI()
     {
-        canvas = Camera.main.transform.Find("Canvas").gameObject;
-        displayGold = canvas.transform.Find("Gold").Find("GoldText").GetComponent<TextMeshProUGUI>();
-        displayStage = canvas.transform.Find("StageIcon").Find("StageText").GetComponent<TextMeshProUGUI>();
-        displayMonsterCount = canvas.transform.Find("MonsterCount").Find("CountText").GetComponent<TextMeshProUGUI>();
-        displayPlayerDPS = canvas.transform.Find("PlayerDPS").Find("DPSText").GetComponent<TextMeshProUGUI>();
-        displayHeroDPS = canvas.transform.Find("HeroDPS").Find("DPSText").GetComponent<TextMeshProUGUI>();
+        Transform canvas = Camera.main.transform.Find("Canvas");
+        #region Load Panel Buttons
+        panelBtns = new Button[4];
+        panelBtns[0] = canvas.Find("ePanels").Find("Button1").GetComponent<Button>();
+        panelBtns[0].onClick.AddListener(TogglePlayerUpgrades);
+        panelBtns[1] = canvas.Find("ePanels").Find("Button2").GetComponent<Button>();
+        panelBtns[1].onClick.AddListener(ToggleHeroUpgrades);
+        panelBtns[2] = canvas.Find("ePanels").Find("Button3").GetComponent<Button>();
+        panelBtns[2].onClick.AddListener(ToggleButton3Placeholder);
+        panelBtns[3] = canvas.Find("ePanels").Find("Button4").GetComponent<Button>();
+        panelBtns[3].onClick.AddListener(ToggleButton4Placeholder);
+        #endregion
+
+        displayGold = canvas.Find("Gold").Find("GoldText").GetComponent<TextMeshProUGUI>();
+        displayStage = canvas.Find("StageIcon").Find("StageText").GetComponent<TextMeshProUGUI>();
+        displayMonsterCount = canvas.Find("MonsterCount").Find("CountText").GetComponent<TextMeshProUGUI>();
+        displayPlayerDPS = canvas.Find("PlayerDPS").Find("DPSText").GetComponent<TextMeshProUGUI>();
+        displayHeroDPS = canvas.Find("HeroDPS").Find("DPSText").GetComponent<TextMeshProUGUI>();
 
         monsterAPrefab = Resources.Load("Prefabs/MonsterA") as GameObject;
         coinPrefab = Resources.Load("Prefabs/Coin") as GameObject;
@@ -110,6 +125,27 @@ public class GameManager : MonoBehaviour
         newCoin.GetComponent<Coin>().coinValue = Mathf.CeilToInt(Mathf.Round(17.5f * Mathf.Pow(1.39f, Mathf.Min(sessionData.currentStage, 115)) * Mathf.Pow(1.13f, Mathf.Max(sessionData.currentStage - 115, 0))) * (0.008f + 0.002f * Mathf.Min(sessionData.currentStage, 150)));
         newCoin.GetComponent<Coin>().target = displayGold.transform.parent.Find("MoneyIcon");
     }
+
+
+    #region Panel Buttons
+    private void TogglePlayerUpgrades()
+    {
+        Debug.Log("Toggle Player Upgrades");
+    }
+    private void ToggleHeroUpgrades()
+    {
+        Debug.Log("Toggle Hero Upgrades");
+    }
+    private void ToggleButton3Placeholder()
+    {
+        Debug.Log("Toggle btn3placeholder Upgrades");
+    }
+    private void ToggleButton4Placeholder()
+    {
+        Debug.Log("Toggle btn4placeholder Upgrades");
+    }
+    #endregion
+
 
     void OnApplicationQuit()
     {
