@@ -6,6 +6,7 @@ TagManager:
   tags:
   - collider_Ground
   - collider_Battle
+  - collider_Bank
   layers:
   - Default
   - TransparentFX

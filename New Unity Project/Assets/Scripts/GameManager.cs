@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         displayHeroDPS = canvas.transform.Find("HeroDPS").Find("DPSText").GetComponent<TextMeshProUGUI>();
 
         monsterAPrefab = Resources.Load("Prefabs/MonsterA") as GameObject;
+        coinPrefab = Resources.Load("Prefabs/Coin") as GameObject;
     }
     private void SyncUI()
     {
@@ -88,6 +89,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private GameObject coinPrefab;
+
     public void monsterDied(Transform spawnPos)
     {
         if (sessionData.stageCurrentMonster <= 9)
@@ -102,6 +105,10 @@ public class GameManager : MonoBehaviour
             sessionData.stageCurrentMonster = 1;
             spawnMonster();
         }
+
+        GameObject newCoin = Instantiate(coinPrefab, spawnPos.position, spawnPos.rotation, Camera.main.transform.Find("Canvas"));
+        newCoin.GetComponent<Coin>().coinValue = Mathf.CeilToInt(Mathf.Round(17.5f * Mathf.Pow(1.39f, Mathf.Min(sessionData.currentStage, 115)) * Mathf.Pow(1.13f, Mathf.Max(sessionData.currentStage - 115, 0))) * (0.008f + 0.002f * Mathf.Min(sessionData.currentStage, 150)));
+        newCoin.GetComponent<Coin>().target = displayGold.transform.parent.Find("MoneyIcon");
     }
 
     void OnApplicationQuit()
