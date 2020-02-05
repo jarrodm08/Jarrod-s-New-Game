@@ -42,16 +42,40 @@ public static class SaveManager
 [System.Serializable]
 public class GameData
 {
+    #region Menu Settings
     public float musicVolume;
+    #endregion
+    #region Player Settings
+    public float playerGold;
+    public float playerDPS;
+    #endregion
+    #region StageInfo
+    public int currentStage;
+    public float stageRequiredMonsters;
+    public float stageCurrentMonster;
+    #endregion
 
     public GameData(SessionData saveData)
     {
         //Here we need to prase session data in a save-able format, so convert any vector3's to arrays, ect so that we can save this class
         SaveMenuSettings(saveData); // Save Menu Settings
+        SavePlayerData(saveData); // Save Player Data
+        SaveStageData(saveData); // Save Stage data
     }
 
     private void SaveMenuSettings(SessionData data)
     {
         musicVolume = data.musicVolume;
+    }
+    private void SavePlayerData(SessionData data)
+    {
+        playerGold = data.playerGold;
+        playerDPS = data.playerDPS;
+    }
+    private void SaveStageData(SessionData data)
+    {
+        currentStage = data.currentStage;
+        stageRequiredMonsters = data.stageRequiredMonsters;
+        stageCurrentMonster = data.stageCurrentMonster;
     }
 }

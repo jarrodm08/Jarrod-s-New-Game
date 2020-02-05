@@ -157,6 +157,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicVolume: 1
+  playerGold: 0
+  playerDPS: 23
+  currentStage: 1
+  stageRequiredMonsters: 10
+  stageCurrentMonster: 1
 --- !u!114 &51390312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: decd7a3b3244a7f45a0494b6d42e374f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnPos: {fileID: 0}
 --- !u!1 &158069352
 GameObject:
   m_ObjectHideFlags: 0
