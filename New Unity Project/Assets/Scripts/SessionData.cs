@@ -10,7 +10,12 @@ public class SessionData : MonoBehaviour
     #endregion  
 
 
-    // Start is called before the first frame update
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+        return;
+    }
+
     void Start()
     {
         GameData data = SaveManager.LoadData();
@@ -25,7 +30,6 @@ public class SessionData : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
