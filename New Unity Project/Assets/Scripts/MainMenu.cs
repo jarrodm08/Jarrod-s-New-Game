@@ -14,12 +14,26 @@ public class MainMenu : MonoBehaviour
         optionsMenu = Camera.main.transform.Find("Canvas").Find("eOptionsMenu").gameObject;
         LoadClouds();
         LoadButtons();
-        optionsMenu.transform.Find("VolumeSlider").GetComponent<Slider>().onValueChanged.AddListener(GameObject.FindObjectOfType<MusicManager>().ChangeVolume);
+        LoadSettings();
     }
 
     void Update()
     {
         MoveClouds();
+    }
+
+
+
+    private void LoadSettings()
+    {
+        Slider musicSlider = optionsMenu.transform.Find("VolumeSlider").GetComponent<Slider>();
+        musicSlider.value = FindObjectOfType<SessionData>().musicVolume;
+        musicSlider.onValueChanged.AddListener(FindObjectOfType<MusicManager>().ChangeVolume);
+    }
+
+    public void SaveDataButton()
+    {
+        SaveManager.SaveData(FindObjectOfType<SessionData>().GetComponent<SessionData>());
     }
 
     private Button[] menuButtons = new Button[4];

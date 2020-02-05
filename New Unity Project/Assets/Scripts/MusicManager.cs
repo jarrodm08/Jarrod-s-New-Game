@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
-    private float musicVolume = 1f;
     private AudioSource audioTrack;
-
+    SessionData sessionData;
 
     void Awake()
     {
@@ -16,16 +15,17 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
+        sessionData = FindObjectOfType<SessionData>().GetComponent<SessionData>();
         audioTrack = this.GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        audioTrack.volume = musicVolume;
+        audioTrack.volume = sessionData.musicVolume;
     }
 
     public void ChangeVolume(float vol)
     {
-        musicVolume = vol;
+        sessionData.musicVolume = vol;
     }
 }
