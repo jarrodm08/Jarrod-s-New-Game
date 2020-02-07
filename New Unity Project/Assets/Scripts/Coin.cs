@@ -27,7 +27,7 @@ public class Coin : MonoBehaviour
             if (bankDB == false)
             {
                 bankDB = true;
-                FindObjectOfType<SessionData>().playerGold += coinValue;
+                //FindObjectOfType<SessionData>().playerGold += coinValue;
                 Destroy(this.gameObject);
             }
         }

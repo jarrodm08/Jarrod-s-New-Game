@@ -5,90 +5,89 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
-{
-    private GameObject mainMenu;
-    private GameObject optionsMenu;
-
+{ 
     void Start()
     {
-        mainMenu = Camera.main.transform.Find("Canvas").Find("eMainMenu").gameObject;
-        optionsMenu = Camera.main.transform.Find("Canvas").Find("eOptionsMenu").gameObject;
-        LoadClouds();
-        LoadButtons();
-        LoadSettings();
+        LoadUI();
+        //LoadSettings();
     }
 
     void Update()
     {
-        MoveClouds();
+        MoveClouds(); // Handles scrolling of clouds
     }
 
-
-
-    private void LoadSettings()
+    private void LoadUI()
     {
-        Slider musicSlider = optionsMenu.transform.Find("VolumeSlider").GetComponent<Slider>();
-        musicSlider.value = FindObjectOfType<SessionData>().musicVolume;
-        musicSlider.onValueChanged.AddListener(FindObjectOfType<MusicManager>().ChangeVolume);
-    }
+        Transform canvas = Camera.main.transform.Find("Canvas");
 
-    public void SaveDataButton()
-    {
-        SaveManager.SaveData(FindObjectOfType<SessionData>().GetComponent<SessionData>());
-    }
+        #region Menus
+        GameObject mainMenu = canvas.Find("eMainMenu").gameObject;
+        GameObject optionsMenu = canvas.Find("eOptionsMenu").gameObject;
+        #endregion
 
-    private Button[] menuButtons = new Button[4];
-    private void LoadButtons()
-    {
-        //Get the menu buttons into an array
-        menuButtons[0] = mainMenu.transform.Find("PlayBtn").GetComponent<Button>();
-        menuButtons[1] = mainMenu.transform.Find("OptionsBtn").GetComponent<Button>();
-        menuButtons[2] = mainMenu.transform.Find("QuitBtn").GetComponent<Button>();
-        menuButtons[3] = optionsMenu.transform.Find("BackBtn").GetComponent<Button>();
-        //Set the listeners for the menu buttons
-        menuButtons[0].onClick.AddListener(PlayButton);
-        menuButtons[1].onClick.AddListener(OptionsButton);
-        menuButtons[2].onClick.AddListener(QuitButton);
-        menuButtons[3].onClick.AddListener(BackButton);
-    }
+        #region Clouds
+        cloud = canvas.Find("Clouds").gameObject;
+        cloudStartPos = cloud.transform.position;
+        #endregion
 
-    private void PlayButton()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
-    }
+        #region Buttons
 
-    private void OptionsButton()
-    {
-        mainMenu.SetActive(false);
-        optionsMenu.SetActive(true);
-    }
+        Button[] menuButtons = new Button[4];
+        menuButtons = canvas.GetComponentsInChildren<Button>(true);
+        for(int i = 0; i< menuButtons.Length;i++)
+        {
+            string name = menuButtons[i].name;
+            menuButtons[i].onClick.AddListener(() => ClickMenuButton(name));
+        }
 
-    private void QuitButton()
-    {
-        Application.Quit();
-    }
+        //Give functionality to each button
+        void ClickMenuButton(string btnName)
+        {
+            if (btnName == "PlayBtn")
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else if (btnName == "OptionsBtn")
+            {
+                mainMenu.SetActive(false);
+                optionsMenu.SetActive(true);
+            }
+            else if (btnName == "QuitBtn")
+            {
+                Application.Quit();
+            }
+            else if (btnName == "BackBtn")
+            {
+                optionsMenu.SetActive(false);
+                mainMenu.SetActive(true);
+            }
+        }
+        #endregion
 
-    private void BackButton()
-    {
-        optionsMenu.SetActive(false);
-        mainMenu.SetActive(true);
+        #region Settings
+        Slider musicSlider = optionsMenu.GetComponentInChildren<Slider>(true);
+        musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
+        void ChangeMusicVolume(float vol)
+        {
+            GameData.sessionData.menuSettings.musicVolume = vol;
+        }
+        musicSlider.value = GameData.sessionData.menuSettings.musicVolume;
+        #endregion
     }
 
     #region Clouds
-    private GameObject cloudA;
-    private Vector2 startPos;
-    private float scrollSpeed = 0.5f;
-
-    private void LoadClouds()
-    {
-        cloudA = Camera.main.transform.Find("Canvas").Find("Clouds").gameObject;
-        startPos = cloudA.transform.position;
-    }
+    private GameObject cloud;
+    private Vector2 cloudStartPos;
+    private float cloudSpeed = 0.5f;
 
     private void MoveClouds()
     {
-        float newPos = Mathf.Repeat(Time.time * scrollSpeed,17.7f); // Number 17.7f depends on size of image, adjust to a precise number where the image repeats seemlessly
-        cloudA.transform.position = startPos + Vector2.right * newPos;
+        float newCloudPos = Mathf.Repeat(Time.time * cloudSpeed, 17.7f); // Number 17.7f depends on size of image
+        cloud.transform.position = cloudStartPos + Vector2.right * newCloudPos;
     }
     #endregion
+
+
+
 }

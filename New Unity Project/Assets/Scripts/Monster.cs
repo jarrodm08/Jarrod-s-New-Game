@@ -5,23 +5,19 @@ using UnityEngine.UI;
 using TMPro;
 public class Monster : MonoBehaviour
 {
-    private bool moveToBattle = false;
+    private bool moveToBattle;
+    private bool battleReady;
     private float walkingSpeed = 1f;
-    private Animator monsterAnimator;
 
-    private GameObject monsterHPSlider;
-    private TextMeshProUGUI displayMonsterHP;
-    private SessionData sessionData;
-    public float monsterMaxHP;
-    public float monsterCurrentHP;
+    private float maxHP;
+    public float currentHP;
+    private Animator monsterAnimator;
 
     void Start()
     {
-        sessionData = FindObjectOfType<SessionData>();
-        monsterAnimator = this.GetComponent<Animator>();
-        monsterHPSlider = this.transform.Find("Healthbar").Find("HealthSlider").gameObject;
-        displayMonsterHP = this.transform.Find("Healthbar").Find("HealthText").GetComponent<TextMeshProUGUI>();
-
+        maxHP = Mathf.Round(17.5f * Mathf.Pow(1.39f, Mathf.Min(GameData.sessionData.playerData.stage, 115)) * Mathf.Pow(1.13f, Mathf.Max(GameData.sessionData.playerData.stage - 115, 0)));
+        currentHP = maxHP;
+        LoadUI();  
     }
 
 
@@ -32,51 +28,75 @@ public class Monster : MonoBehaviour
             gameObject.GetComponent<Rigidbody2D>().MovePosition(transform.position - transform.right * Time.deltaTime * walkingSpeed);
         }
 
-        //update healthbar
-        if (monsterCurrentHP != null && monsterMaxHP != 0f)
+    }
+   
+
+    private void LoadUI()
+    {
+        GameObject monsterHPSlider = this.transform.Find("Healthbar").Find("HealthSlider").gameObject;
+        TextMeshProUGUI displayMonsterHP = this.transform.Find("Healthbar").Find("HealthText").GetComponent<TextMeshProUGUI>();
+        monsterAnimator = this.GetComponent<Animator>();
+
+        this.GetComponent<Button>().onClick.AddListener(takeDamage);
+        void takeDamage()
         {
-            displayMonsterHP.text = monsterCurrentHP + "/" + monsterMaxHP;
-            Vector3 temp = monsterHPSlider.transform.localScale;
-            temp.x = monsterCurrentHP / monsterMaxHP;
-            monsterHPSlider.transform.localScale = temp;
+            if (battleReady == true)
+            {
+                if (currentHP - GameData.sessionData.playerData.tapDamage > 0)
+                {
+                    currentHP -= GameData.sessionData.playerData.tapDamage;
+                    monsterAnimator.Play("damage", 0, 0);
+                }
+                else if (currentHP - GameData.sessionData.playerData.tapDamage <= 0)
+                {
+                    currentHP = 0;
+                    this.transform.Find("Healthbar").gameObject.SetActive(false);
+                    this.GetComponent<Button>().onClick.RemoveAllListeners();
+                    monsterAnimator.Play("death", 0, 0);
+                    this.GetComponent<Image>().CrossFadeAlpha(0f, 1f, false);
+                    Invoke("Despawn", 1f);
+                }
+                displayMonsterHP.text = currentHP + "/" + maxHP;
+                FindObjectOfType<Player>().attack();
+            }
         }
+
+        displayMonsterHP.text = currentHP + "/" + maxHP;  
     }
 
-    public void takeDamage()
+    private void Despawn()
     {
-        if (monsterCurrentHP - sessionData.playerDPS >= 1)
+        Destroy(this.gameObject);
+        if (GameData.sessionData.playerData.monsterNum <= 9)
         {
-            monsterCurrentHP -= sessionData.playerDPS;
-            monsterAnimator.Play("damage", 0, 0);
-
+            GameData.sessionData.playerData.monsterNum += 1;
+            FindObjectOfType<GameManager>().SpawnMonster(this.transform);
         }
         else
         {
-            monsterCurrentHP = 0;
-            monsterAnimator.Play("death", 0, 0);
-            this.GetComponent<Image>().CrossFadeAlpha(0f,1f,false);
-            Invoke("monsterDeath",1f);
+            GameData.sessionData.playerData.stage += 1;
+            GameData.sessionData.playerData.monsterNum = 1;
+            FindObjectOfType<GameManager>().SpawnMonster();
         }
-    }
-
-    private void monsterDeath()
-    {
-        Destroy(this.gameObject);
-        FindObjectOfType<GameManager>().monsterDied(this.transform);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.tag == "collider_Ground")
+        if (collision.collider.tag == "collider_Ground" && moveToBattle == false && battleReady == false)
         {
             moveToBattle = true;
-            monsterAnimator.SetBool("isWalking", true);
+            monsterAnimator.SetBool("isWalking",true);
+            Debug.Log("Colling with ground only");
+            //Walking to battle
         }
         if (collision.collider.tag == "collider_Battle")
         {
             moveToBattle = false;
+            battleReady = true;
             monsterAnimator.SetBool("isWalking", false);
-            FindObjectOfType<Player>().attackMonster();
+            Debug.Log("Battle");
+
         }
+
     }
 }
