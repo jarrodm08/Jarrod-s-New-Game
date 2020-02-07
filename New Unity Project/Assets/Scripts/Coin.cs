@@ -4,41 +4,33 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public float coinValue;
-    public Transform target;
+    private float coinValue;
     private float speed = 5f;
+    public Transform target;
+    
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        coinValue = Mathf.Ceil(FindObjectOfType<Monster>().maxHP * 0.008f + 0.0002f * Mathf.Min(GameData.sessionData.playerData.stage, 150));
+        target = Camera.main.transform.Find("Canvas").Find("Gold").Find("MoneyIcon");
     }
 
     private bool bankDB = false;
-    // Update is called once per frame
     void Update()
     {
         float step = speed * Time.deltaTime; // calculate distance to move
         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
 
-        // Check if the position of the cube and sphere are approximately equal.
+        // Check if the position of the coin and bankIcon are approximately equal.
         if (Vector3.Distance(transform.position, target.position) < 0.001f)
         {
             if (bankDB == false)
             {
                 bankDB = true;
-                //FindObjectOfType<SessionData>().playerGold += coinValue;
+                GameData.sessionData.playerData.gold += coinValue;
                 Destroy(this.gameObject);
             }
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "collider_Bank")
-        {
-            Debug.Log("BANK IT");
-              
         }
     }
 }

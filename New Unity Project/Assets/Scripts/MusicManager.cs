@@ -4,19 +4,16 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
+    private AudioSource music;
 
     void Start()
     {
-
+        music = this.GetComponent<AudioSource>();
     }
 
-    void Update()
+    public void ChangeMusicVolume(float vol)
     {
-        //this.GetComponent<AudioSource>().volume = FindObjectOfType<SessionData>().musicVolume;
-    }
-
-    public void ChangeVolume(float vol)
-    {
-        //sessionData.musicVolume = vol;
+        GameData.sessionData.menuSettings.musicVolume = vol;
+        music.volume = vol;
     }
 }

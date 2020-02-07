@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
         {
             SyncUI();
         }
-       
     }
 
     private Transform[] spawnPoints;
@@ -83,6 +82,26 @@ public class GameManager : MonoBehaviour
         UIDic.Add("Stage",canvas.Find("Stage").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("MonsterNum",canvas.Find("MonsterNum").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("PlayerDPS",canvas.Find("PlayerDPS").Find("PlayerDPSText").GetComponent<TextMeshProUGUI>());
+
+        foreach (Button btn in canvas.Find("Tabs").GetComponentsInChildren<Button>())
+        {
+            GameObject panel = canvas.Find(btn.name).gameObject;
+            panel.GetComponentInChildren<Button>().onClick.AddListener(() => TogglePanel(panel));
+            btn.onClick.AddListener(() => TogglePanel(panel));
+        }
+
+
+        void TogglePanel(GameObject panel)
+        {
+            if (panel.activeSelf == false)
+            {
+                panel.SetActive(true);
+            }
+            else
+            {
+                panel.SetActive(false);
+            }
+        }
     }
 
     private void SyncUI()
@@ -99,31 +118,9 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //private bool gameLoaded = false;
 
-    //private GameObject canvas;
-    //private TextMeshProUGUI displayGold;
-    //private TextMeshProUGUI displayMonsterCount;
-    //private TextMeshProUGUI displayStage;
-    //private TextMeshProUGUI displayPlayerDPS;
-    //private TextMeshProUGUI displayHeroDPS;
 
-    //private Button[] panelBtns;
-
-    //void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
-    //{
-    //    SceneManager.sceneLoaded -= OnLevelFinishedLoading; // Disable the listner for scene changes
-    //    LoadUI();
-    //    gameLoaded = true;
-
-    //    Debug.Log(sessionData.stageCurrentMonster);
-    //    GameObject playerPrefab = Resources.Load("Prefabs/Player") as GameObject;
-    //    GameObject playerSpawn = Camera.main.transform.Find("Canvas").Find("PlayerSpawn").Find("Spawn").gameObject;
-
-    //    GameObject player = Instantiate(playerPrefab,playerSpawn.transform.position,playerSpawn.transform.rotation,playerSpawn.transform); // Spawn the first player
-       
-    //    spawnMonster();
-    //}
+    
 
     //private void LoadUI()
     //{

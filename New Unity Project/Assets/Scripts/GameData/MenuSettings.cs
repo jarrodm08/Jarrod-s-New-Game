@@ -6,10 +6,12 @@ using UnityEngine;
 public class MenuSettings
 {
     public float musicVolume;
+    public float effectsVolume;
 
     public MenuSettings()
     {
         //Set Defaults Here
         this.musicVolume = 1f;
+        this.effectsVolume = 1f;
     }
 }

@@ -67,11 +67,7 @@ public class MainMenu : MonoBehaviour
 
         #region Settings
         Slider musicSlider = optionsMenu.GetComponentInChildren<Slider>(true);
-        musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
-        void ChangeMusicVolume(float vol)
-        {
-            GameData.sessionData.menuSettings.musicVolume = vol;
-        }
+        musicSlider.onValueChanged.AddListener(FindObjectOfType<MusicManager>().ChangeMusicVolume);
         musicSlider.value = GameData.sessionData.menuSettings.musicVolume;
         #endregion
     }

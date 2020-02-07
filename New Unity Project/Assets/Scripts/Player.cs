@@ -8,10 +8,17 @@ public class Player : MonoBehaviour
     private float runningSpeed = 2f;
 
     private Animator playerAnimator;
-   
+    private AudioSource audioSrc;
+    private AudioClip[] slashClips;
+
     void Start()
     {
-        playerAnimator = this.GetComponent<Animator>();       
+        playerAnimator = this.GetComponent<Animator>();
+        audioSrc = this.GetComponent<AudioSource>();
+        slashClips = new AudioClip[3];
+        slashClips[0] = Resources.Load("Audio/slash1") as AudioClip;
+        slashClips[1] = Resources.Load("Audio/slash2") as AudioClip;
+        slashClips[2] = Resources.Load("Audio/slash3") as AudioClip;
     }
 
     void Update()
@@ -22,33 +29,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    private int audioIndex = 0;
     public void attack()
     {
         playerAnimator.Play("atkSlash", 0, 0);
+        audioSrc.PlayOneShot(slashClips[audioIndex], GameData.sessionData.menuSettings.effectsVolume*10); // Times 10 because these audio clips are very quiet
+        if (audioIndex <=1 )
+        {
+            audioIndex++;
+        }
+        else
+        {
+            audioIndex = 0;
+        }
     }
-
-    //public void attackMonster()
-    //{
-    //    if (FindObjectOfType<Monster>().monsterCurrentHP - sessionData.playerDPS >= 0 | FindObjectOfType<Monster>().monsterCurrentHP < sessionData.playerDPS)
-    //    {
-    //        playerAnimator.Play("atkSlash", 0, 0);
-
-    //        Invoke("monsterDamageDelay",0.40f); // Delay the damage animation
-    //        if (FindObjectOfType<Monster>().monsterCurrentHP - sessionData.playerDPS > 0)
-    //        {
-    //            Invoke("attackMonster", 1f);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Tried to attack again even though the enemy has died");
-    //    }
-
-    //}
-    //private void monsterDamageDelay()
-    //{
-    //    FindObjectOfType<Monster>().takeDamage();
-    //}
 
     void OnCollisionEnter2D(Collision2D collision)
     {
