@@ -42,14 +42,19 @@ public class GameData
 { //don't need ": Monobehaviour" because we are not attaching it to a game object
 
     public static GameData sessionData;
+
     public MenuSettings menuSettings;
 	public PlayerData playerData;
 
+	public List<Upgrade> playerUpgrades;
+	
 
     public GameData()
     {
 		menuSettings = new MenuSettings();
 		playerData = new PlayerData();
+
+		playerUpgrades = new List<Upgrade>();
     }
 
 }

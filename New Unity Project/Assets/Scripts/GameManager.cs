@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
     {
         Transform canvas = Camera.main.transform.Find("Canvas");
 
+        #region Player/Monster
         spawnPoints = new Transform[2];
         spawnPoints[0] = canvas.Find("PlayerSpawn").Find("Spawn");
         spawnPoints[1] = canvas.Find("MonsterSpawn").Find("Spawn");
@@ -77,19 +78,19 @@ public class GameManager : MonoBehaviour
        // monsterPrefabs[2] = Resources.Load("Prefabs/MonsterC") as GameObject;
 
         playerPrefab = Resources.Load("Prefabs/Player") as GameObject;
+        #endregion
 
         UIDic.Add("Gold",canvas.Find("Gold").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("Stage",canvas.Find("Stage").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("MonsterNum",canvas.Find("MonsterNum").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("PlayerDPS",canvas.Find("PlayerDPS").Find("PlayerDPSText").GetComponent<TextMeshProUGUI>());
-
+      
         foreach (Button btn in canvas.Find("Tabs").GetComponentsInChildren<Button>())
         {
             GameObject panel = canvas.Find(btn.name).gameObject;
             panel.GetComponentInChildren<Button>().onClick.AddListener(() => TogglePanel(panel));
             btn.onClick.AddListener(() => TogglePanel(panel));
         }
-
 
         void TogglePanel(GameObject panel)
         {
@@ -102,6 +103,8 @@ public class GameManager : MonoBehaviour
                 panel.SetActive(false);
             }
         }
+
+         
     }
 
     private void SyncUI()
@@ -110,6 +113,11 @@ public class GameManager : MonoBehaviour
         UIDic["Stage"].text = GameData.sessionData.playerData.stage.ToString();
         UIDic["MonsterNum"].text = GameData.sessionData.playerData.monsterNum.ToString();
         UIDic["PlayerDPS"].text = GameData.sessionData.playerData.tapDamage.ToString();
+    }
+
+    private void LoadUpgrades()
+    {
+
     }
 
     void OnApplicationQuit()
