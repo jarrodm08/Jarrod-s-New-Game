@@ -46,7 +46,8 @@ public class GameData
     public MenuSettings menuSettings;
 	public PlayerData playerData;
 
-	public UpgradeData playerUpgrade;
+	public UpgradeData playerUpgrade; //
+	public UpgradeData[] heroUpgrades;
 	
 
     public GameData()
@@ -55,6 +56,11 @@ public class GameData
 		playerData = new PlayerData();
 
 		playerUpgrade = new UpgradeData();
+		heroUpgrades = new UpgradeData[1]; // set array size to number of upgrades in the game
+		for (int i = 0; i < heroUpgrades.Length; i++)
+		{
+			heroUpgrades[i] = new UpgradeData();
+		}
     }
 
 }

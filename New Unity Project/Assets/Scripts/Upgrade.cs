@@ -11,10 +11,10 @@ public class Upgrade : MonoBehaviour
     public float upgradeCurrentLevel;
     public float upgradeCurrentDamage;
     public float upgradeBaseCost;
-    public float HeroUnlockOrder;
+    public int heroUnlockOrder;
     private int[] bonusLevels;
+    private int heroCostMultiplier = -9; // Smaller number DECREASES COST
 
-    private int HeroCostMultiplier = -9; // Smaller number DECREASES COST
     void Start()
     {
 
@@ -38,7 +38,6 @@ public class Upgrade : MonoBehaviour
                 multiplier += 1;
             }
         }
-        Debug.Log("Multiplier: " + multiplier);
         return multiplier;
     }
     
@@ -52,7 +51,7 @@ public class Upgrade : MonoBehaviour
         else
         {
             //Hero Upgrade Cost
-            return Mathf.Round(this.upgradeBaseCost * Mathf.Pow(1.082f, this.upgradeCurrentLevel) * (Mathf.Pow(1.082F, 1f) - 1) / 0.82f * (1 - HeroCostMultiplier));
+            return Mathf.Round(this.upgradeBaseCost * Mathf.Pow(1.082f, this.upgradeCurrentLevel) * (Mathf.Pow(1.082F, 1f) - 1) / 0.82f * (1 - heroCostMultiplier));
         }
     }
     public float upgradeIncreaseDamage()
@@ -65,7 +64,7 @@ public class Upgrade : MonoBehaviour
         else
         {
             //Hero Damage Increase        
-            return (Mathf.Pow(upgradeBaseCost / 10 * (1 - 23 / 1000 * Mathf.Min(this.HeroUnlockOrder, 34)), Mathf.Min(HeroUnlockOrder, 34)) * this.upgradeCurrentLevel + 1) * damageBonus(true) - upgradeCurrentDamage;
+            return (Mathf.Pow(upgradeBaseCost / 10 * (1 - 23 / 1000 * Mathf.Min(this.heroUnlockOrder, 34)), Mathf.Min(heroUnlockOrder, 34)) * this.upgradeCurrentLevel + 1) * damageBonus(true) - upgradeCurrentDamage;
         }
     }
 
@@ -159,10 +158,19 @@ public class Upgrade : MonoBehaviour
             {
                 //Hero Set Damage
                 upgradeCurrentDamage += upgradeIncreaseDamage();
-                upgradeCurrentDamageText.text = "Damage: " + this.upgradeCurrentDamage.ToString() ;
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage = upgradeCurrentDamage;
+                upgradeCurrentDamageText.text = "Damage: " + upgradeCurrentDamage.ToString() ;
             }
-            this.upgradeCurrentLevel += 1;
-            GameData.sessionData.playerUpgrade.currentLevel += 1; // saves upgrade damage
+            upgradeCurrentLevel += 1;
+            if (upgradeName == "Player")
+            {
+                GameData.sessionData.playerUpgrade.currentLevel += 1; // saves upgrade damage
+            }
+            else
+            {
+                GameData.sessionData.heroUpgrades[heroUnlockOrder-1].currentLevel += 1; // saves upgrade damage
+            }
+            
             upgradeCostText.text = upgradeCost().ToString(); // Sets the upgrade cost to a new updated cost value
             upgradeCurrentLevelText.text = "(LVL: " + upgradeCurrentLevel.ToString() + " )"; // update the level
             upgradeIncreaseDamageText.text = "+ " + upgradeIncreaseDamage().ToString() + " DPS"; ;
@@ -183,25 +191,42 @@ public class Upgrade : MonoBehaviour
         {
             if (GameData.sessionData.playerUpgrade.upgradeName != "")
             {
-                //SAVED DATA - LOAD VALUES BACK INTO THIS CLASS
-                Debug.Log("Player Upgrade - Found Saved data: upgradeCurrentLevel = " + GameData.sessionData.playerUpgrade.currentLevel);
+                //SAVED DATA - LOAD VALUES BACK INTO THIS CLASS              
                 upgradeName = GameData.sessionData.playerUpgrade.upgradeName;
-                upgradeCurrentLevel = GameData.sessionData.playerUpgrade.currentLevel;              
-               
-                HeroUnlockOrder = GameData.sessionData.playerUpgrade.heroUnlockOrder;
+                upgradeCurrentLevel = GameData.sessionData.playerUpgrade.currentLevel;                      
+                heroUnlockOrder = GameData.sessionData.playerUpgrade.heroUnlockOrder;
                 upgradeBaseCost = GameData.sessionData.playerUpgrade.baseCost;
             }
             else
-            {
-                Debug.Log("No Saved data for player Upgrade");
+            {              
                 GameData.sessionData.playerUpgrade.upgradeName = upgradeName;
                 GameData.sessionData.playerUpgrade.currentLevel = 1; // 1 is default level for player
                 GameData.sessionData.playerUpgrade.currentDamage = GameData.sessionData.playerData.tapDamage;
-                GameData.sessionData.playerUpgrade.heroUnlockOrder = HeroUnlockOrder;
+                GameData.sessionData.playerUpgrade.heroUnlockOrder = heroUnlockOrder;
                 GameData.sessionData.playerUpgrade.baseCost = upgradeBaseCost;
             }
             upgradeCurrentDamage = GameData.sessionData.playerUpgrade.currentDamage;
-            Debug.Log("LOading player upgrade damage as: " + upgradeCurrentDamage);
+        }
+        else
+        {
+            if (GameData.sessionData.heroUpgrades[heroUnlockOrder-1].upgradeName != "")
+            {
+                Debug.Log("Save File for fluffers WAS found");
+                upgradeName = GameData.sessionData.heroUpgrades[heroUnlockOrder-1].upgradeName;
+                upgradeCurrentLevel = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel;
+                heroUnlockOrder = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].heroUnlockOrder;
+                upgradeBaseCost = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].baseCost;
+            }
+            else
+            {
+                Debug.Log(" NO Save File for flufferswas  found");
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].upgradeName = upgradeName;
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel = upgradeCurrentLevel;
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage = upgradeCurrentDamage;
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].heroUnlockOrder = heroUnlockOrder;
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].baseCost = upgradeBaseCost;
+            }
+            upgradeCurrentDamage = GameData.sessionData.heroUpgrades[heroUnlockOrder-1].currentDamage;
         }
 
     }
