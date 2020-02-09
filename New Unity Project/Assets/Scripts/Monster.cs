@@ -29,40 +29,76 @@ public class Monster : MonoBehaviour
         }
 
     }
-   
 
+    TextMeshProUGUI displayMonsterHP;
     private void LoadUI()
     {
         GameObject monsterHPSlider = this.transform.Find("Healthbar").Find("HealthSlider").gameObject;
-        TextMeshProUGUI displayMonsterHP = this.transform.Find("Healthbar").Find("HealthText").GetComponent<TextMeshProUGUI>();
+        displayMonsterHP = this.transform.Find("Healthbar").Find("HealthText").GetComponent<TextMeshProUGUI>();
         monsterAnimator = this.GetComponent<Animator>();
 
-        this.GetComponent<Button>().onClick.AddListener(takeDamage);
-        void takeDamage()
+        this.GetComponent<Button>().onClick.AddListener(() => takeDamage(GameData.sessionData.playerData.tapDamage));
+        displayMonsterHP.text = currentHP + "/" + maxHP;
+
+        InvokeRepeating("HeroDamageRelay", 1,1);
+        
+        
+    }
+    // use this as a relay because we cannot invoke repeating if the method needs params
+    private void HeroDamageRelay()
+    {
+        takeDamage(UpgradeUtils.GetTotalHeroDPS());
+    }
+
+    public void takeDamage(float damage)
+    {
+        if (battleReady == true)
         {
-            if (battleReady == true)
+            if (currentHP - damage > 0)
             {
-                if (currentHP - GameData.sessionData.playerData.tapDamage > 0)
-                {
-                    currentHP -= GameData.sessionData.playerData.tapDamage;
-                    monsterAnimator.Play("damage", 0, 0);
-                }
-                else if (currentHP - GameData.sessionData.playerData.tapDamage <= 0)
-                {
-                    currentHP = 0;
-                    this.transform.Find("Healthbar").gameObject.SetActive(false);
-                    this.GetComponent<Button>().onClick.RemoveAllListeners();
-                    monsterAnimator.Play("death", 0, 0);
-                    this.GetComponent<Image>().CrossFadeAlpha(0f, 1f, false);
-                    GameObject newCoin = Instantiate(Resources.Load("Prefabs/Coin") as GameObject, this.transform.position,this.transform.rotation,this.transform.parent);
-                    Invoke("Despawn", 1f);
-                }
-                displayMonsterHP.text = currentHP + "/" + maxHP;
-                FindObjectOfType<Player>().attack();
+                currentHP -= damage;
+                monsterAnimator.Play("damage", 0, 0);
+            }
+            else if (currentHP - damage <= 0)
+            {
+                currentHP = 0;
+                this.transform.Find("Healthbar").gameObject.SetActive(false);
+                this.GetComponent<Button>().onClick.RemoveAllListeners();
+                CancelInvoke();
+                monsterAnimator.Play("death", 0, 0);
+                this.GetComponent<Image>().CrossFadeAlpha(0f, 1f, false);
+                GameObject newCoin = Instantiate(Resources.Load("Prefabs/Coin") as GameObject, this.transform.position, this.transform.rotation, this.transform.parent);
+                Invoke("Despawn", 1f);
+            }
+            displayMonsterHP.text = currentHP + "/" + maxHP;
+
+            if (damage == GameData.sessionData.playerData.tapDamage)
+            {
+                FindObjectOfType<Player>().attack(); // Attack animation if it was dealt by player
             }
         }
-
-        displayMonsterHP.text = currentHP + "/" + maxHP;  
+    }
+    public void takeHeroDamage()
+    {
+        if (battleReady == true && UpgradeUtils.GetTotalHeroDPS() > 0)
+        {
+            if (currentHP - UpgradeUtils.GetTotalHeroDPS() > 0)
+            {
+                currentHP -= UpgradeUtils.GetTotalHeroDPS();
+                monsterAnimator.Play("damage", 0, 0);
+            }
+            else if (currentHP - UpgradeUtils.GetTotalHeroDPS() <= 0)
+            {
+                currentHP = 0;
+                this.transform.Find("Healthbar").gameObject.SetActive(false);
+                this.GetComponent<Button>().onClick.RemoveAllListeners();
+                monsterAnimator.Play("death", 0, 0);
+                this.GetComponent<Image>().CrossFadeAlpha(0f, 1f, false);
+                GameObject newCoin = Instantiate(Resources.Load("Prefabs/Coin") as GameObject, this.transform.position, this.transform.rotation, this.transform.parent);
+                Invoke("Despawn", 1f);
+            }
+            displayMonsterHP.text = currentHP + "/" + maxHP;
+        }
     }
 
     private void Despawn()

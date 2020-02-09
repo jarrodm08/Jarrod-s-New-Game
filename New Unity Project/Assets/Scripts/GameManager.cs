@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
         UIDic.Add("Stage", canvas.Find("Stage").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("MonsterNum", canvas.Find("MonsterNum").GetComponentInChildren<TextMeshProUGUI>());
         UIDic.Add("PlayerDPS", canvas.Find("PlayerDPS").Find("PlayerDPSText").GetComponent<TextMeshProUGUI>());
-
+        UIDic.Add("HeroDPS",canvas.Find("HeroDPS").Find("DPSText").GetComponent<TextMeshProUGUI>());
         foreach (Button btn in canvas.Find("Tabs").GetComponentsInChildren<Button>())
         {
             GameObject panel = canvas.Find(btn.name).gameObject;
@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
         UIDic["Stage"].text = GameData.sessionData.playerData.stage.ToString();
         UIDic["MonsterNum"].text = GameData.sessionData.playerData.monsterNum.ToString();
         UIDic["PlayerDPS"].text = GameData.sessionData.playerData.tapDamage.ToString();
+        UIDic["HeroDPS"].text = UpgradeUtils.GetTotalHeroDPS().ToString();
     }
 
 
@@ -138,6 +139,7 @@ public class GameManager : MonoBehaviour
 
 public class UpgradeUtils
 {
+    public static int heroCostMultiplier = -9;
     public static int GetImprovementBonus(int level,bool checkNextLevel = false)
     {
         int multiplier = 1;
@@ -154,23 +156,6 @@ public class UpgradeUtils
         }
         return multiplier;
     }
-    
-    public static int heroCostMultiplier = -9;
-
-    public static float GetUpgradeCost(string name,int level,float baseCost)
-    {
-       
-        if (name == "Player")
-        {
-            return Mathf.Round(5 * (Mathf.Pow(1.062f, level + 1) - Mathf.Pow(1.062f, level)) / 0.062f);
-        }
-        else
-        {
-            return Mathf.Round(baseCost * (Mathf.Pow(1.082f, level + 1)) * (Mathf.Pow(1.082f, 1) - 1) / 0.82f * (1 - heroCostMultiplier));
-        }
-    }
-
-
     public static float[] CalculateUpgrade(string name, int level, float baseCost, int heroUnlockOrder)
     {
         float[] results = new float[2];
@@ -190,6 +175,15 @@ public class UpgradeUtils
             results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + 1) * GetImprovementBonus(level, true)) - currentDamage);
         }
         return results;
+    }
+    public static float GetTotalHeroDPS()
+    {
+        float dps = 0;
+        for (int i = 0; i < GameData.sessionData.heroUpgrades.Length; i++)
+        {
+            dps += GameData.sessionData.heroUpgrades[i].currentDamage;
+        }
+        return dps;
     }
 
     public UpgradeUtils()

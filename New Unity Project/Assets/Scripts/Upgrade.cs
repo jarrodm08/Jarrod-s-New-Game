@@ -8,17 +8,12 @@ public class Upgrade : MonoBehaviour
 {
 
     public string upgradeName;
+    public int heroUnlockOrder;
     public int currentLevel;
-    public float currentDamage;
     public float upgradeCost;
     public float upgradeDPS;
     public float baseCost;
-    public int heroUnlockOrder;
-
-    void Start()
-    {
-        LoadUI();
-    }
+    public float currentDamage;
 
     // UI
     private TextMeshProUGUI upgradeNameText;
@@ -28,8 +23,10 @@ public class Upgrade : MonoBehaviour
     private TextMeshProUGUI upgradeCostText;
     private TextMeshProUGUI upgradeDPSText;
 
-    
-    
+    void Start()
+    {
+        LoadUI();
+    }
 
     private bool syncStart = false;
     void Update()
@@ -124,11 +121,13 @@ public class Upgrade : MonoBehaviour
     {
         UpgradeData data;
 
+        //Determines which upgrade we edit
         if (upgradeName == "Player")
         {
             data = GameData.sessionData.playerUpgrade;
+            // Set these values here because this is not "unlockable" and is the default 
             currentDamage = GameData.sessionData.playerData.tapDamage;
-            currentLevel = 1;
+            currentLevel = 1; 
         }
         else
         {
@@ -147,7 +146,7 @@ public class Upgrade : MonoBehaviour
         else
         {
             data.upgradeName = upgradeName;
-            data.currentLevel = currentLevel; // 1 is default level for player
+            data.currentLevel = currentLevel;
             data.currentDamage = currentDamage;
             data.heroUnlockOrder = heroUnlockOrder;
             data.baseCost = baseCost;
