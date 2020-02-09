@@ -3806,12 +3806,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeName: Jinx
+  heroUnlockOrder: 2
   currentLevel: 0
-  currentDamage: 0
   upgradeCost: 0
   upgradeDPS: 0
   baseCost: 180
-  heroUnlockOrder: 2
+  currentDamage: 0
 --- !u!1 &805736972
 GameObject:
   m_ObjectHideFlags: 0
@@ -6752,12 +6752,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeName: Fluffers
+  heroUnlockOrder: 1
   currentLevel: 0
-  currentDamage: 0
   upgradeCost: 0
   upgradeDPS: 0
   baseCost: 30
-  heroUnlockOrder: 1
+  currentDamage: 0
 --- !u!1 &1401686661
 GameObject:
   m_ObjectHideFlags: 0
@@ -11003,6 +11003,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1517244808, guid: 81fb7ba5bbeb05a49a77daa444674abb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81fb7ba5bbeb05a49a77daa444674abb, type: 3}

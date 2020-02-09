@@ -31,9 +31,11 @@ public class Monster : MonoBehaviour
     }
 
     TextMeshProUGUI displayMonsterHP;
+    GameObject monsterHPSlider;
+
     private void LoadUI()
     {
-        GameObject monsterHPSlider = this.transform.Find("Healthbar").Find("HealthSlider").gameObject;
+        monsterHPSlider = this.transform.Find("Healthbar").Find("HealthSlider").gameObject;
         displayMonsterHP = this.transform.Find("Healthbar").Find("HealthText").GetComponent<TextMeshProUGUI>();
         monsterAnimator = this.GetComponent<Animator>();
 
@@ -41,8 +43,6 @@ public class Monster : MonoBehaviour
         displayMonsterHP.text = currentHP + "/" + maxHP;
 
         InvokeRepeating("HeroDamageRelay", 1,1);
-        
-        
     }
     // use this as a relay because we cannot invoke repeating if the method needs params
     private void HeroDamageRelay()
@@ -54,10 +54,13 @@ public class Monster : MonoBehaviour
     {
         if (battleReady == true)
         {
-            if (currentHP - damage > 0)
+            if (currentHP - damage > 0 && damage > 0)
             {
                 currentHP -= damage;
                 monsterAnimator.Play("damage", 0, 0);
+                Vector3 tmp = monsterHPSlider.transform.localScale;
+                tmp.x = currentHP/maxHP;
+                monsterHPSlider.transform.localScale = tmp;
             }
             else if (currentHP - damage <= 0)
             {
