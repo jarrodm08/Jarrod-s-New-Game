@@ -98,7 +98,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 153.3
   m_fontStyle: 1
-  m_textAlignment: 258
+  m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 4004247060351840959}
   - component: {fileID: 3335781458236022183}
   - component: {fileID: 3932335808400654}
+  - component: {fileID: 4004247059772976844}
   m_Layer: 5
   m_Name: Upgrade
   m_TagString: Untagged
@@ -233,6 +234,23 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &4004247059772976844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995845328110350718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df84d94c464276045b88587e1d4a2dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeName: Player
+  upgradeCurrentLevel: 1
+  upgradeCurrentDamage: 0
+  upgradeBaseCost: 0
+  heroUnlockOrder: 0
 --- !u!1 &1786609576616139859
 GameObject:
   m_ObjectHideFlags: 0

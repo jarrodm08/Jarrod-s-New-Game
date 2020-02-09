@@ -63,8 +63,9 @@ public class Upgrade : MonoBehaviour
         }
         else
         {
-            //Hero Damage Increase        
-            return (Mathf.Pow(upgradeBaseCost / 10 * (1 - 23 / 1000 * Mathf.Min(this.heroUnlockOrder, 34)), Mathf.Min(heroUnlockOrder, 34)) * this.upgradeCurrentLevel + 1) * damageBonus(true) - upgradeCurrentDamage;
+            //Hero Damage Increase  
+            
+            return ((upgradeBaseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (upgradeCurrentLevel + 1) * damageBonus(true)) - upgradeCurrentDamage);
         }
     }
 
@@ -110,7 +111,7 @@ public class Upgrade : MonoBehaviour
         //BUTTON - DPS
         upgradeIncreaseDamageText = this.transform.Find("BuyBtn").Find("DPSIncreaseText").GetComponent<TextMeshProUGUI>();
         upgradeIncreaseDamageText.text = "+ " + upgradeIncreaseDamage().ToString() + " DPS";
-
+        //Debug.Log(upgradeName + " increase dps = " + upgradeIncreaseDamage());
         
 
         upgradeNameText.text = upgradeName;
@@ -157,8 +158,8 @@ public class Upgrade : MonoBehaviour
             else
             {
                 //Hero Set Damage
-                upgradeCurrentDamage += upgradeIncreaseDamage();
-                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage = upgradeCurrentDamage;
+                GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage += upgradeIncreaseDamage();
+                upgradeCurrentDamage = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage;
                 upgradeCurrentDamageText.text = "Damage: " + upgradeCurrentDamage.ToString() ;
             }
             upgradeCurrentLevel += 1;
@@ -169,6 +170,7 @@ public class Upgrade : MonoBehaviour
             else
             {
                 GameData.sessionData.heroUpgrades[heroUnlockOrder-1].currentLevel += 1; // saves upgrade damage
+                Debug.Log(upgradeName + " level = " + GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel);
             }
             
             upgradeCostText.text = upgradeCost().ToString(); // Sets the upgrade cost to a new updated cost value

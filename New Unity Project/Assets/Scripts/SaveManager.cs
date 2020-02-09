@@ -56,7 +56,7 @@ public class GameData
 		playerData = new PlayerData();
 
 		playerUpgrade = new UpgradeData();
-		heroUpgrades = new UpgradeData[1]; // set array size to number of upgrades in the game
+		heroUpgrades = new UpgradeData[2]; // set array size to number of upgrades in the game
 		for (int i = 0; i < heroUpgrades.Length; i++)
 		{
 			heroUpgrades[i] = new UpgradeData();
