@@ -75,11 +75,11 @@ public class Upgrade : MonoBehaviour
         float[] upgradeResults = UpgradeUtils.CalculateUpgrade(upgradeName, currentLevel, baseCost, heroUnlockOrder);
         upgradeCost = upgradeResults[0];
         upgradeDPS = upgradeResults[1];
-        upgradeCostText.text = upgradeCost.ToString();
-        upgradeDPSText.text = "+" + upgradeDPS.ToString() + " DPS";
+        upgradeCostText.text = RoundingUtils.GetShorthand(upgradeCost);
+        upgradeDPSText.text = "+" + RoundingUtils.GetShorthand(upgradeDPS) + " DPS";
         upgradeNameText.text = upgradeName;
-        currentDamageText.text = "Damage: " + currentDamage.ToString() + " DPS";
-        currentLevelText.text = "(LVL: " + currentLevel.ToString() + ")";
+        currentDamageText.text = "Damage: " + RoundingUtils.GetShorthand(currentDamage) + " DPS";
+        currentLevelText.text = "(LVL: " + RoundingUtils.GetShorthand(currentLevel) + ")";
         
 
 

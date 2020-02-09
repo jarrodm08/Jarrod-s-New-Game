@@ -120,8 +120,8 @@ public class GameManager : MonoBehaviour
         UIDic["Gold"].text = RoundingUtils.GetShorthand(GameData.sessionData.playerData.gold);
         UIDic["Stage"].text = GameData.sessionData.playerData.stage.ToString();
         UIDic["MonsterNum"].text = GameData.sessionData.playerData.monsterNum.ToString() + "/10";
-        UIDic["PlayerDPS"].text = GameData.sessionData.playerData.tapDamage.ToString();
-        UIDic["HeroDPS"].text = UpgradeUtils.GetTotalHeroDPS().ToString();
+        UIDic["PlayerDPS"].text = RoundingUtils.GetShorthand(GameData.sessionData.playerData.tapDamage);
+        UIDic["HeroDPS"].text = RoundingUtils.GetShorthand(UpgradeUtils.GetTotalHeroDPS());
 
         UpgradeUtils.UnlockNextHero(heroUpgradePanel);
     }
@@ -216,6 +216,35 @@ public class UpgradeUtils
     { 
         improvementBonusDic = new Dictionary<int, int>();
         improvementBonusDic.Add(10, 2); // Level 10 = 200% Damage (100% increase)
+        improvementBonusDic.Add(30, 2);
+        improvementBonusDic.Add(50, 2);
+        improvementBonusDic.Add(70, 2);
+        improvementBonusDic.Add(90, 2);
+        improvementBonusDic.Add(110, 2);
+        improvementBonusDic.Add(130, 2);
+        improvementBonusDic.Add(150, 2);
+        improvementBonusDic.Add(170, 2);
+        improvementBonusDic.Add(190, 2);
+        improvementBonusDic.Add(210, 3);
+        improvementBonusDic.Add(230, 3);
+        improvementBonusDic.Add(250, 2);
+        improvementBonusDic.Add(270, 2);
+        improvementBonusDic.Add(290, 2);
+        improvementBonusDic.Add(310, 3);
+        improvementBonusDic.Add(330, 2);
+        improvementBonusDic.Add(350, 2);
+        improvementBonusDic.Add(370, 2);
+        improvementBonusDic.Add(400, 2);
+        improvementBonusDic.Add(420, 3);
+        improvementBonusDic.Add(440, 3);
+        improvementBonusDic.Add(460, 3);
+        improvementBonusDic.Add(480, 2);
+        improvementBonusDic.Add(500, 2);
+        improvementBonusDic.Add(520, 2);
+        improvementBonusDic.Add(540, 2);
+        improvementBonusDic.Add(560, 2);
+        improvementBonusDic.Add(580, 2);
+        improvementBonusDic.Add(600, 2);
     }
 }
 public class RoundingUtils 
