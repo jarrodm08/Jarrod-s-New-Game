@@ -90,10 +90,11 @@ public class GameManager : MonoBehaviour
         {
             GameObject panel = canvas.Find(btn.name).gameObject;
             panel.GetComponentInChildren<Button>().onClick.AddListener(() => TogglePanel(panel));
-            panel.transform.Find("Scroll View").GetComponent<ScrollRect>().verticalNormalizedPosition = 0; // Scroll to the very bottom
+            
             if (panel.name == "Panel2")
             {
                 heroUpgradePanel = panel;
+                panel.transform.Find("Scroll View").GetComponent<ScrollRect>().verticalNormalizedPosition = 0; // Scroll to the very bottom
             }
             btn.onClick.AddListener(() => TogglePanel(panel));
         }
@@ -193,9 +194,10 @@ public class UpgradeUtils
             Upgrade hero = upgrades[i - upgrades.Length - 1];
             if (hero.gameObject.activeSelf == false)
             {
-                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName,hero.currentLevel-1,hero.baseCost,hero.heroUnlockOrder)[0]*0.10f)
+                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName, hero.currentLevel - 1, hero.baseCost, hero.heroUnlockOrder)[0] * 0.10f || GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked == true)
                 {
                     hero.gameObject.SetActive(true);
+                    GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked = true;
                     break;
                 } 
             }

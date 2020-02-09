@@ -14,7 +14,7 @@ public class UpgradeData
     public float currentDamage;
     public float baseCost;
 
-
+    public bool unlocked;
 
    
 
@@ -23,5 +23,6 @@ public class UpgradeData
     public UpgradeData()
     {
         upgradeName = "";
+        unlocked = false;
     }
 }

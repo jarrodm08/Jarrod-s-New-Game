@@ -14,7 +14,6 @@ public class Upgrade : MonoBehaviour
     public float upgradeDPS;
     public float baseCost;
     public float currentDamage;
-
     // UI
     private TextMeshProUGUI upgradeNameText;
     private TextMeshProUGUI currentLevelText;
@@ -81,6 +80,9 @@ public class Upgrade : MonoBehaviour
         upgradeNameText.text = upgradeName;
         currentDamageText.text = "Damage: " + currentDamage.ToString() + " DPS";
         currentLevelText.text = "(LVL: " + currentLevel.ToString() + ")";
+        
+
+
     }
 
     private void BuyUpgrade()
@@ -157,6 +159,6 @@ public class Upgrade : MonoBehaviour
 
     public void CheatGold()
     {
-        GameData.sessionData.playerData.gold += 25;
+        GameData.sessionData.playerData.gold += 5;
     }
 }
