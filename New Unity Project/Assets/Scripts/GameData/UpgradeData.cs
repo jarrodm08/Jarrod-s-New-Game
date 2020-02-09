@@ -6,16 +6,22 @@ using TMPro;
 [System.Serializable]
 public class UpgradeData
 {
-    public string upgradeName;
-    public float currentLevel;
-    public float currentDamage;
-    public int heroUnlockOrder;
-    public float baseCost;
-    public float upgradeIndex;
 
-   public UpgradeData()
+    public string upgradeName;
+    public int currentLevel;
+    public int heroUnlockOrder;
+    public int upgradeIndex;
+    public float currentDamage;
+    public float baseCost;
+
+
+
+   
+
+
+
+    public UpgradeData()
     {
         upgradeName = "";
-        currentLevel = 0;
     }
 }
