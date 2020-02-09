@@ -152,7 +152,6 @@ public class UpgradeUtils
                 multiplier += (p.Value - 1);
             }
         }
-        Debug.Log("Multiplier = " + multiplier);
         return multiplier;
     }
     
