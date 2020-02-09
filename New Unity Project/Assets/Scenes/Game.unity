@@ -3806,9 +3806,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeName: Jinx
-  upgradeCurrentLevel: 0
-  upgradeCurrentDamage: 0
-  upgradeBaseCost: 180
+  currentLevel: 0
+  currentDamage: 0
+  upgradeCost: 0
+  upgradeDPS: 0
+  baseCost: 180
   heroUnlockOrder: 2
 --- !u!1 &805736972
 GameObject:
@@ -6750,9 +6752,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradeName: Fluffers
-  upgradeCurrentLevel: 0
-  upgradeCurrentDamage: 0
-  upgradeBaseCost: 30
+  currentLevel: 0
+  currentDamage: 0
+  upgradeCost: 0
+  upgradeDPS: 0
+  baseCost: 30
   heroUnlockOrder: 1
 --- !u!1 &1401686661
 GameObject:

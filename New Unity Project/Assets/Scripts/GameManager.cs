@@ -172,7 +172,7 @@ public class UpgradeUtils
     }
 
 
-    public static float[] CalculateUpgrade(string name, int level, float baseCost)
+    public static float[] CalculateUpgrade(string name, int level, float baseCost, int heroUnlockOrder)
     {
         float[] results = new float[2];
         if (name == "Player")
@@ -184,7 +184,11 @@ public class UpgradeUtils
         }
         else
         {
-            results[0] = Mathf.Round(baseCost * (Mathf.Pow(1.082f, level + 1)) * (Mathf.Pow(1.082f, 1) - 1) / 0.82f * (1 - heroCostMultiplier));
+            //Cost
+            results[0] = Mathf.Round(baseCost * (Mathf.Pow(1.082f, level)) * (Mathf.Pow(1.082f, 1) - 1) / 0.82f * (1 - heroCostMultiplier));
+            //Damage
+            float currentDamage = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level) * GetImprovementBonus(level)));
+            results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + 1) * GetImprovementBonus(level, true)) - currentDamage);
         }
         return results;
     }

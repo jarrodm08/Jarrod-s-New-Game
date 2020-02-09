@@ -39,7 +39,7 @@ public class Upgrade : MonoBehaviour
     //}
 
     // UI
-    private Sprite upgradeIcon;
+
     private TextMeshProUGUI upgradeNameText;
     private TextMeshProUGUI currentLevelText;
     private TextMeshProUGUI currentDamageText;
@@ -79,7 +79,8 @@ public class Upgrade : MonoBehaviour
         LoadUpgrades(); // Load data if savefile exists
         // After loading upgrade data, then we should re-calculate the upgrade costs and nextDPS
 
-        float[] upgradeResults = UpgradeUtils.CalculateUpgrade(upgradeName,currentLevel,baseCost);
+        Debug.Log(upgradeName+currentLevel+baseCost);
+        float[] upgradeResults = UpgradeUtils.CalculateUpgrade(upgradeName,currentLevel,baseCost,heroUnlockOrder);
         upgradeCost = upgradeResults[0];
         upgradeDPS = upgradeResults[1];
         upgradeCostText.text = upgradeCost.ToString();
@@ -110,27 +111,24 @@ public class Upgrade : MonoBehaviour
         {
             GameData.sessionData.playerData.gold -= upgradeCost; // Take money from player
             currentLevel += 1; // Increase Level
+            UpgradeData data;
+
             if (upgradeName == "Player")
             {
-                UpgradeData data = GameData.sessionData.playerUpgrade;
-
-                //Player set damage
-                GameData.sessionData.playerData.tapDamage += upgradeDPS;   //Sets the root Player tap damage
-                currentDamage += upgradeDPS;
-                data.currentDamage = currentDamage;
-                currentDamageText.text = "Damage: " + currentDamage;
-
-                data.currentLevel = currentLevel;
+                data = GameData.sessionData.playerUpgrade;
+                GameData.sessionData.playerData.tapDamage += upgradeDPS;   //Sets the root Player tap damage 
             }
             else
             {
-                ////Hero Set Damage
-                //GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage += upgradeIncreaseDamage();
-                //upgradeCurrentDamage = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage;
-                //upgradeCurrentDamageText.text = "Damage: " + upgradeCurrentDamage.ToString();
+                data = GameData.sessionData.heroUpgrades[heroUnlockOrder-1];          
             }
 
-            float[] upgradeResults = UpgradeUtils.CalculateUpgrade(upgradeName, currentLevel, baseCost);
+            currentDamage += upgradeDPS;
+            data.currentDamage = currentDamage;
+            currentDamageText.text = "Damage: " + currentDamage + " DPS";
+            data.currentLevel = currentLevel;
+
+            float[] upgradeResults = UpgradeUtils.CalculateUpgrade(upgradeName, currentLevel, baseCost,heroUnlockOrder);
             upgradeCost = upgradeResults[0];
             upgradeDPS = upgradeResults[1];
             upgradeCostText.text = upgradeCost.ToString();
@@ -138,24 +136,7 @@ public class Upgrade : MonoBehaviour
             upgradeNameText.text = upgradeName;
             currentDamageText.text = "Damage: " + currentDamage.ToString() + " DPS";
             currentLevelText.text = "(LVL: " + currentLevel.ToString() + ")";
-
-
-            //upgradeCurrentLevel += 1;
-            //if (upgradeName == "Player")
-            //{
-            //    GameData.sessionData.playerUpgrade.currentLevel += 1; // saves upgrade damage
-            //}
-            //else
-            //{
             //    GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel += 1; // saves upgrade damage
-            //    Debug.Log(upgradeName + " level = " + GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel);
-            //}
-
-            //upgradeCostText.text = upgradeCost.ToString(); // Sets the upgrade cost to a new updated cost value
-            //upgradeCurrentLevelText.text = "(LVL: " + upgradeCurrentLevel.ToString() + " )"; // update the level
-            //upgradeIncreaseDamageText.text = "+ " + upgradeIncreaseDamage().ToString() + " DPS"; ;
-
-            //Debug.Log("Improvement bonus for Level: " + (upgradeCurrentLevel + 1) + " = " + GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].improvementBonus(true));
         }
         else
         {
@@ -188,28 +169,29 @@ public class Upgrade : MonoBehaviour
                 data.baseCost = baseCost;
             }
 
-            currentDamage = data.currentDamage; ;
+            currentDamage = data.currentDamage;
         }
         else
         {
-            //if (GameData.sessionData.heroUpgrades[heroUnlockOrder-1].upgradeName != "")
-            //{
-            //    Debug.Log("Save File for fluffers WAS found");
-            //    upgradeName = GameData.sessionData.heroUpgrades[heroUnlockOrder-1].upgradeName;
-            //    upgradeCurrentLevel = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel;
-            //    heroUnlockOrder = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].heroUnlockOrder;
-            //    upgradeBaseCost = GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].baseCost;
-            //}
-            //else
-            //{
-            //    Debug.Log(" NO Save File for flufferswas  found");
-            //    //GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].upgradeName = upgradeName;
-            //    //GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentLevel = upgradeCurrentLevel;
-            //    //GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].currentDamage = upgradeCurrentDamage;
-            //    //GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].heroUnlockOrder = heroUnlockOrder;
-            //    //GameData.sessionData.heroUpgrades[heroUnlockOrder - 1].baseCost = upgradeBaseCost;
-            //}
-            //upgradeCurrentDamage = GameData.sessionData.heroUpgrades[heroUnlockOrder-1].currentDamage;
+            UpgradeData data = GameData.sessionData.heroUpgrades[heroUnlockOrder-1];
+            if (data.upgradeName != "")
+            {
+                Debug.Log("Loading: " + upgradeName + " From SaveFile");
+                upgradeName = data.upgradeName;
+                currentLevel = data.currentLevel;
+                heroUnlockOrder = data.heroUnlockOrder;
+                baseCost = data.baseCost;
+            }
+            else
+            {
+                Debug.Log(upgradeName + " has no save data");
+                data.upgradeName = upgradeName;
+                data.currentLevel = currentLevel; // 0 is default level for hero
+                data.currentDamage = currentDamage;
+                data.heroUnlockOrder = heroUnlockOrder;
+                data.baseCost = baseCost;
+            }
+            currentDamage = data.currentDamage;
         }
 
     }
