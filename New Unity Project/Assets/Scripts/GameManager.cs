@@ -90,14 +90,12 @@ public class GameManager : MonoBehaviour
         {
             GameObject panel = canvas.Find(btn.name).gameObject;
             panel.GetComponentInChildren<Button>().onClick.AddListener(() => TogglePanel(panel));
-            btn.onClick.AddListener(() => TogglePanel(panel));
-
-            Upgrade[] upgrades = panel.GetComponentsInChildren<Upgrade>(); // Loads all upgrades in the content
-            for (int i = 0; i < upgrades.Length; i++)
+            panel.transform.Find("Scroll View").GetComponent<ScrollRect>().verticalNormalizedPosition = 0; // Scroll to the very bottom
+            if (panel.name == "Panel2")
             {
-
+                heroUpgradePanel = panel;
             }
-
+            btn.onClick.AddListener(() => TogglePanel(panel));
         }
 
         void TogglePanel(GameObject panel)
@@ -111,9 +109,9 @@ public class GameManager : MonoBehaviour
                 panel.SetActive(false);
             }
         }
-
     }
 
+    private GameObject heroUpgradePanel;
     private void SyncUI()
     {
         UIDic["Gold"].text = GameData.sessionData.playerData.gold.ToString();
@@ -121,6 +119,8 @@ public class GameManager : MonoBehaviour
         UIDic["MonsterNum"].text = GameData.sessionData.playerData.monsterNum.ToString();
         UIDic["PlayerDPS"].text = GameData.sessionData.playerData.tapDamage.ToString();
         UIDic["HeroDPS"].text = UpgradeUtils.GetTotalHeroDPS().ToString();
+
+        UpgradeUtils.UnlockNextHero(heroUpgradePanel);
     }
 
 
@@ -184,6 +184,22 @@ public class UpgradeUtils
             dps += GameData.sessionData.heroUpgrades[i].currentDamage;
         }
         return dps;
+    }
+    public static void UnlockNextHero(GameObject panel)
+    {
+        Upgrade[] upgrades = panel.GetComponentsInChildren<Upgrade>(true);
+        for (int i = upgrades.Length*2; i > upgrades.Length; i--)
+        {
+            Upgrade hero = upgrades[i - upgrades.Length - 1];
+            if (hero.gameObject.activeSelf == false)
+            {
+                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName,hero.currentLevel-1,hero.baseCost,hero.heroUnlockOrder)[0]*0.10f)
+                {
+                    hero.gameObject.SetActive(true);
+                    break;
+                } 
+            }
+        }
     }
 
     public UpgradeUtils()
