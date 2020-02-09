@@ -16,6 +16,6 @@ public class PlayerData
         gold = 0f;
         stage = 1f;
         monsterNum = 1f;
-        tapDamage = 12f;
+        tapDamage = 1f;
     }
 }

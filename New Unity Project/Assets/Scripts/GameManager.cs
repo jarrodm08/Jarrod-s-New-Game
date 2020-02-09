@@ -90,6 +90,13 @@ public class GameManager : MonoBehaviour
             GameObject panel = canvas.Find(btn.name).gameObject;
             panel.GetComponentInChildren<Button>().onClick.AddListener(() => TogglePanel(panel));
             btn.onClick.AddListener(() => TogglePanel(panel));
+
+            Upgrade[] upgrades = panel.GetComponentsInChildren<Upgrade>(); // Loads all upgrades in the content
+            for (int i = 0; i < upgrades.Length; i++)
+            {
+
+            }
+
         }
 
         void TogglePanel(GameObject panel)
@@ -104,7 +111,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-         
     }
 
     private void SyncUI()
@@ -126,7 +132,10 @@ public class GameManager : MonoBehaviour
     }
 
 
-
+    public void CheatGold()
+    {
+        GameData.sessionData.playerData.gold += 1;
+    }
 
     
 

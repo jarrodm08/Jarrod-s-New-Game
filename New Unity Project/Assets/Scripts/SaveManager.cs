@@ -46,7 +46,7 @@ public class GameData
     public MenuSettings menuSettings;
 	public PlayerData playerData;
 
-	public List<Upgrade> playerUpgrades;
+	public UpgradeData playerUpgrade;
 	
 
     public GameData()
@@ -54,7 +54,7 @@ public class GameData
 		menuSettings = new MenuSettings();
 		playerData = new PlayerData();
 
-		playerUpgrades = new List<Upgrade>();
+		playerUpgrade = new UpgradeData();
     }
 
 }
