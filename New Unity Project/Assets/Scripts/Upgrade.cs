@@ -14,14 +14,8 @@ public class Upgrade : MonoBehaviour
     public float upgradeDPS;
     public float baseCost;
     public float currentDamage;
-    // UI
-    private TextMeshProUGUI upgradeNameText;
-    private TextMeshProUGUI currentLevelText;
-    private TextMeshProUGUI currentDamageText;
-    // Buy Button
-    private TextMeshProUGUI upgradeCostText;
-    private TextMeshProUGUI upgradeDPSText;
-
+   
+   
     void Start()
     {
         LoadUI();
@@ -36,22 +30,18 @@ public class Upgrade : MonoBehaviour
         }
     }
 
+    private Dictionary<string, TextMeshProUGUI> UIDic;
     private void LoadUI()
     {
-        //Name
-        upgradeNameText = this.transform.Find("Name").GetComponent<TextMeshProUGUI>();
-        //Level
-        currentLevelText = this.transform.Find("LevelText").GetComponent<TextMeshProUGUI>();
-        //Current Damage
-        currentDamageText = this.transform.Find("DamageText").GetComponent<TextMeshProUGUI>();
-        //BUTTON - Cost
-        upgradeCostText = this.transform.Find("BuyBtn").Find("CostText").GetComponent<TextMeshProUGUI>();
-        //BUTTON - DPS
-        upgradeDPSText = this.transform.Find("BuyBtn").Find("DPSIncreaseText").GetComponent<TextMeshProUGUI>();
-        //BUTTON
+        UIDic = new Dictionary<string, TextMeshProUGUI>();
+        UIDic.Add("upgradeNameText", this.transform.Find("Name").GetComponent<TextMeshProUGUI>());
+        UIDic.Add("currentLevelText", this.transform.Find("LevelText").GetComponent<TextMeshProUGUI>());
+        UIDic.Add("currentDamageText", this.transform.Find("DamageText").GetComponent<TextMeshProUGUI>());
+        UIDic.Add("upgradeCostText", this.transform.Find("BuyBtn").Find("CostText").GetComponent<TextMeshProUGUI>());
+        UIDic.Add("upgradeDPSText", this.transform.Find("BuyBtn").Find("DPSIncreaseText").GetComponent<TextMeshProUGUI>());
         this.GetComponentInChildren<Button>().onClick.AddListener(BuyUpgrade);
 
-        LoadUpgrades(); // Load data if savefile exists
+        LoadUpgrade(); // Load data if savefile exists
         RefreshUI(); // Reload/Recalculate values
         syncStart = true;
     }
@@ -75,11 +65,11 @@ public class Upgrade : MonoBehaviour
         float[] upgradeResults = UpgradeUtils.CalculateUpgrade(upgradeName, currentLevel, baseCost, heroUnlockOrder);
         upgradeCost = upgradeResults[0];
         upgradeDPS = upgradeResults[1];
-        upgradeCostText.text = RoundingUtils.GetShorthand(upgradeCost);
-        upgradeDPSText.text = "+" + RoundingUtils.GetShorthand(upgradeDPS) + " DPS";
-        upgradeNameText.text = upgradeName;
-        currentDamageText.text = "Damage: " + RoundingUtils.GetShorthand(currentDamage) + " DPS";
-        currentLevelText.text = "(LVL: " + RoundingUtils.GetShorthand(currentLevel) + ")";
+        UIDic["upgradeCostText"].text = RoundingUtils.GetShorthand(upgradeCost);
+        UIDic["upgradeDPSText"].text = " + " + RoundingUtils.GetShorthand(upgradeDPS) + " DPS";
+        UIDic["upgradeNameText"].text = upgradeName;
+        UIDic["currentDamageText"].text = "Damage: " + RoundingUtils.GetShorthand(currentDamage) + " DPS";
+        UIDic["currentLevelText"].text = "(LVL: " + RoundingUtils.GetShorthand(currentLevel) + ")";
         
 
 
@@ -106,20 +96,20 @@ public class Upgrade : MonoBehaviour
             currentLevel += 1; // Increase Level
             currentDamage += upgradeDPS;
             data.currentDamage = currentDamage;
-            currentDamageText.text = "Damage: " + currentDamage + " DPS";
+            UIDic["currentDamageText"].text = "Damage: " + RoundingUtils.GetShorthand(currentDamage) + " DPS";
             data.currentLevel = currentLevel;
 
             RefreshUI();
         }
         else
         {
-            Debug.Log("Cant afford");
+            //CANT AFFORD UPGRADE
         }
     }
 
 
 
-    private void LoadUpgrades()
+    private void LoadUpgrade()
     {
         UpgradeData data;
 
@@ -159,6 +149,6 @@ public class Upgrade : MonoBehaviour
 
     public void CheatGold()
     {
-        GameData.sessionData.playerData.gold += 501100000000000f;
+        GameData.sessionData.playerData.gold += 5001;
     }
 }

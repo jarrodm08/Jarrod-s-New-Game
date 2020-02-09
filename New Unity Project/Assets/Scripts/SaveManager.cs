@@ -26,11 +26,9 @@ public static class SaveManager
 			FileStream file = File.Open(Application.persistentDataPath + "/savedGames.gd", FileMode.Open);
 			GameData.sessionData = (GameData)formatter.Deserialize(file);
 			file.Close();
-			Debug.Log("Loaded Save File");
 		}
 		else
 		{
-			Debug.Log("No Save File. Creating New File");
 			GameData.sessionData = new GameData();
 		}
 	}
