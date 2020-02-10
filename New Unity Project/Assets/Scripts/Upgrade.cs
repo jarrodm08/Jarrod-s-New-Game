@@ -104,8 +104,6 @@ public class Upgrade : MonoBehaviour
         }
     }
 
-
-
     private void LoadUpgrade()
     {
         UpgradeData data;
@@ -146,6 +144,6 @@ public class Upgrade : MonoBehaviour
 
     public void CheatGold()
     {
-        GameData.sessionData.playerData.gold += 5001;
+        GameData.sessionData.playerData.gold += 5;
     }
 }

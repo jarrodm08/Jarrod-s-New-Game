@@ -95,8 +95,14 @@ public class GameManager : MonoBehaviour
             }
         }
         #endregion
+
+        if (GameData.sessionData.heroUpgrades[0].unlocked == true)
+        {
+            Debug.Log("We have fluffers unlocked, so change sprite");
+        }
     }
 
+    private bool changeSprite = false;
     private void SyncUI()
     {
         UIDic["Gold"].text = RoundingUtils.GetShorthand(GameData.sessionData.playerData.gold);
@@ -106,7 +112,16 @@ public class GameManager : MonoBehaviour
         UIDic["HeroDPS"].text = RoundingUtils.GetShorthand(UpgradeUtils.GetTotalHeroDPS());
 
         UpgradeUtils.UnlockNextHero(upgradePanelsDIc["Panel2"]);
+        ///// ****** TRIGGER DIALOGUE TO BUY FIRST UPGRADE AFTER 30 GOLD
+        if (GameData.sessionData.heroUpgrades[0].unlocked == true && changeSprite == false)
+        {
+            changeSprite = true;
+            Camera.main.transform.Find("Canvas").Find("Tabs").Find("Panel2").GetComponent<Image>().color = new Color32(50,92,233,255);
+            Camera.main.transform.Find("Canvas").Find("Tabs").Find("Panel2").Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/HeroUpgrades") as Sprite;
+            Camera.main.transform.Find("Canvas").Find("Tabs").Find("Panel2").Find("Icon").GetComponent<Image>().color = new Color32(255,255,255,200);
+        }
     }
+
 
     public void SpawnMonster(Transform spawnPos = null)
     {
