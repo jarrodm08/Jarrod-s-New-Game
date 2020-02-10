@@ -15,11 +15,6 @@ public class UpgradeData
     public float baseCost;
 
     public bool unlocked;
-
-   
-
-
-
     public UpgradeData()
     {
         upgradeName = "";

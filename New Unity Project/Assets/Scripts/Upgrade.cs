@@ -70,9 +70,6 @@ public class Upgrade : MonoBehaviour
         UIDic["upgradeNameText"].text = upgradeName;
         UIDic["currentDamageText"].text = "Damage: " + RoundingUtils.GetShorthand(currentDamage) + " DPS";
         UIDic["currentLevelText"].text = "(LVL: " + RoundingUtils.GetShorthand(currentLevel) + ")";
-        
-
-
     }
 
     private void BuyUpgrade()
