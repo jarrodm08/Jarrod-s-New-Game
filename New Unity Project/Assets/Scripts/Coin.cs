@@ -13,7 +13,7 @@ public class Coin : MonoBehaviour
     void Start()
     {
         coinValue = Mathf.Ceil(FindObjectOfType<Monster>().maxHP * 0.008f + 0.0002f * Mathf.Min(GameData.sessionData.playerData.stage, 150));
-        target = Camera.main.transform.Find("Canvas").Find("Gold").Find("MoneyIcon");
+        target = Camera.main.transform.Find("Canvas").Find("MainUI").Find("GoldDisplay").Find("Icon");
     }
 
     private bool bankDB = false;
