@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
         UIDic[uiNames[4]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(GameData.sessionData.playerData.gold);
         UIDic[uiNames[5]].GetComponentInChildren<TextMeshProUGUI>().text = GameData.sessionData.playerData.stage.ToString();
         UIDic[uiNames[6]].GetComponentInChildren<TextMeshProUGUI>().text = GameData.sessionData.playerData.monsterNum.ToString() + "/10";
-        UIDic[uiNames[7]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(GameData.sessionData.playerData.tapDamage);
+        UIDic[uiNames[7]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(GameData.sessionData.playerUpgrade.currentDamage);
         UIDic[uiNames[8]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(UpgradeUtils.GetTotalHeroDPS());
 
         UpgradeUtils.UnlockNextHero(UIDic[uiNames[10]].gameObject);

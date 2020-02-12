@@ -3546,6 +3546,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4018181363168805502, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Cost
+      objectReference: {fileID: 0}
     - target: {fileID: 6543645040138165165, guid: 277b6dc120220bf43885a0a605f81466,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3596,6 +3601,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8449133584854732158, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: DPSIncrease
+      objectReference: {fileID: 0}
     - target: {fileID: 6362540590997685310, guid: 277b6dc120220bf43885a0a605f81466,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3621,6 +3631,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6861039474961222530, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Level
+      objectReference: {fileID: 0}
     - target: {fileID: 3542545593085949517, guid: 277b6dc120220bf43885a0a605f81466,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3645,6 +3660,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 546577847855966394, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Damage
       objectReference: {fileID: 0}
     - target: {fileID: 7396631874455420, guid: 277b6dc120220bf43885a0a605f81466, type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3699,11 +3719,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Jinx
   heroUnlockOrder: 2
-  currentLevel: 0
-  upgradeCost: 0
-  upgradeDPS: 0
   baseCost: 180
-  currentDamage: 0
+  upgrade:
+    upgradeName: 
+    currentLevel: 0
+    heroUnlockOrder: 0
+    currentDamage: 0
+    unlocked: 0
 --- !u!1 &805736972
 GameObject:
   m_ObjectHideFlags: 0
@@ -6133,6 +6155,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4018181363168805502, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Cost
+      objectReference: {fileID: 0}
     - target: {fileID: 6543645040138165165, guid: 277b6dc120220bf43885a0a605f81466,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -6183,6 +6210,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8449133584854732158, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: DPSIncrease
+      objectReference: {fileID: 0}
     - target: {fileID: 6362540590997685310, guid: 277b6dc120220bf43885a0a605f81466,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -6208,6 +6240,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6861039474961222530, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Level
+      objectReference: {fileID: 0}
     - target: {fileID: 3542545593085949517, guid: 277b6dc120220bf43885a0a605f81466,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -6232,6 +6269,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 546577847855966394, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Damage
       objectReference: {fileID: 0}
     - target: {fileID: 7396631874455420, guid: 277b6dc120220bf43885a0a605f81466, type: 3}
       propertyPath: m_textInfo.characterCount
@@ -6286,11 +6328,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: Fluffers
   heroUnlockOrder: 1
-  currentLevel: 0
-  upgradeCost: 0
-  upgradeDPS: 0
   baseCost: 30
-  currentDamage: 0
+  upgrade:
+    upgradeName: 
+    currentLevel: 0
+    heroUnlockOrder: 0
+    currentDamage: 0
+    unlocked: 0
 --- !u!1 &1401686661
 GameObject:
   m_ObjectHideFlags: 0
@@ -7600,7 +7644,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000056010413}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1720349574
@@ -10295,6 +10339,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 149.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018181363168805502, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Cost
+      objectReference: {fileID: 0}
+    - target: {fileID: 8449133584854732158, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: DPSIncrease
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861039474961222530, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Level
+      objectReference: {fileID: 0}
+    - target: {fileID: 546577847855966394, guid: 277b6dc120220bf43885a0a605f81466,
+        type: 3}
+      propertyPath: m_Name
+      value: Damage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 277b6dc120220bf43885a0a605f81466, type: 3}

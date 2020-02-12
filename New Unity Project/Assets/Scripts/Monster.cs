@@ -39,7 +39,7 @@ public class Monster : MonoBehaviour
         displayMonsterHP = this.transform.Find("Healthbar").Find("HealthText").GetComponent<TextMeshProUGUI>();
         monsterAnimator = this.GetComponent<Animator>();
 
-        this.GetComponent<Button>().onClick.AddListener(() => takeDamage(GameData.sessionData.playerData.tapDamage));
+        this.GetComponent<Button>().onClick.AddListener(() => takeDamage(GameData.sessionData.playerUpgrade.currentDamage));
         displayMonsterHP.text = currentHP + "/" + maxHP;
 
         InvokeRepeating("HeroDamageRelay", 1,1);
@@ -75,7 +75,7 @@ public class Monster : MonoBehaviour
             }
             displayMonsterHP.text = currentHP + "/" + maxHP;
 
-            if (damage == GameData.sessionData.playerData.tapDamage)
+            if (damage == GameData.sessionData.playerUpgrade.currentDamage)
             {
                 FindObjectOfType<Player>().attack(); // Attack animation if it was dealt by player
             }

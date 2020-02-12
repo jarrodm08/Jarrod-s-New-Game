@@ -58,7 +58,7 @@ public class UpgradeUtils
             Upgrade hero = upgrades[i - upgrades.Length - 1];
             if (hero.gameObject.activeSelf == false)
             {
-                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName, hero.currentLevel - 1, hero.baseCost, hero.heroUnlockOrder)[0] * 0.10f || GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked == true)
+                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName, hero.upgrade.currentLevel - 1, hero.baseCost, hero.heroUnlockOrder)[0] * 0.10f || GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked == true)
                 {
                     hero.gameObject.SetActive(true);
                     GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked = true;

@@ -8,7 +8,7 @@ public class PlayerData
     public float gold;
     public float stage;
     public float monsterNum;
-    public float tapDamage;
+    
 
     public PlayerData()
     {
@@ -16,6 +16,5 @@ public class PlayerData
         gold = 0f;
         stage = 1f;
         monsterNum = 1f;
-        tapDamage = 1f;
     }
 }
