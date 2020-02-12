@@ -40,7 +40,7 @@ public class Monster : MonoBehaviour
         monsterAnimator = this.GetComponent<Animator>();
 
         this.GetComponent<Button>().onClick.AddListener(() => takeDamage(GameData.sessionData.playerUpgrade.currentDamage));
-        displayMonsterHP.text = currentHP + "/" + maxHP;
+        displayMonsterHP.text = RoundingUtils.GetShorthand(currentHP) + "/" + RoundingUtils.GetShorthand(maxHP);
 
         InvokeRepeating("HeroDamageRelay", 1,1);
     }
@@ -73,7 +73,7 @@ public class Monster : MonoBehaviour
                 GameObject newCoin = Instantiate(Resources.Load("Prefabs/Coin") as GameObject, this.transform.position, this.transform.rotation, this.transform.parent);
                 Invoke("Despawn", 1f);
             }
-            displayMonsterHP.text = currentHP + "/" + maxHP;
+            displayMonsterHP.text = RoundingUtils.GetShorthand(currentHP) + "/" + RoundingUtils.GetShorthand(maxHP);
 
             if (damage == GameData.sessionData.playerUpgrade.currentDamage)
             {
