@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
 {
     private bool moveToBattle;
     private bool battleReady;
-    private float walkingSpeed = 1f;
+    private float walkingSpeed = 10f;
 
     public float maxHP;
     public float currentHP;
@@ -20,15 +20,15 @@ public class Monster : MonoBehaviour
         LoadUI();  
     }
 
-
     void Update()
     {
         if (moveToBattle == true)
         {
             gameObject.GetComponent<Rigidbody2D>().MovePosition(transform.position - transform.right * Time.deltaTime * walkingSpeed);
         }
-
     }
+
+    
 
     TextMeshProUGUI displayMonsterHP;
     GameObject monsterHPSlider;
@@ -54,10 +54,10 @@ public class Monster : MonoBehaviour
     {
         if (battleReady == true)
         {
-            if (currentHP - damage > 0 && damage > 0)
+            if (damage > 0 && currentHP - damage > 0)
             {
                 currentHP -= damage;
-                monsterAnimator.Play("damage", 0, 0);
+                monsterAnimator.Play("damage");
                 Vector3 tmp = monsterHPSlider.transform.localScale;
                 tmp.x = currentHP/maxHP;
                 monsterHPSlider.transform.localScale = tmp;
@@ -68,8 +68,8 @@ public class Monster : MonoBehaviour
                 this.transform.Find("Healthbar").gameObject.SetActive(false);
                 this.GetComponent<Button>().onClick.RemoveAllListeners();
                 CancelInvoke();
-                monsterAnimator.Play("death", 0, 0);
-                this.GetComponent<Image>().CrossFadeAlpha(0f, 1f, false);
+                monsterAnimator.Play("death");
+                StartCoroutine(FadeTo(0f, 1.0f));
                 GameObject newCoin = Instantiate(Resources.Load("Prefabs/Coin") as GameObject, this.transform.position, this.transform.rotation, this.transform.parent);
                 Invoke("Despawn", 1f);
             }
@@ -79,28 +79,6 @@ public class Monster : MonoBehaviour
             {
                 FindObjectOfType<Player>().attack(); // Attack animation if it was dealt by player
             }
-        }
-    }
-    public void takeHeroDamage()
-    {
-        if (battleReady == true && UpgradeUtils.GetTotalHeroDPS() > 0)
-        {
-            if (currentHP - UpgradeUtils.GetTotalHeroDPS() > 0)
-            {
-                currentHP -= UpgradeUtils.GetTotalHeroDPS();
-                monsterAnimator.Play("damage", 0, 0);
-            }
-            else if (currentHP - UpgradeUtils.GetTotalHeroDPS() <= 0)
-            {
-                currentHP = 0;
-                this.transform.Find("Healthbar").gameObject.SetActive(false);
-                this.GetComponent<Button>().onClick.RemoveAllListeners();
-                monsterAnimator.Play("death", 0, 0);
-                this.GetComponent<Image>().CrossFadeAlpha(0f, 1f, false);
-                GameObject newCoin = Instantiate(Resources.Load("Prefabs/Coin") as GameObject, this.transform.position, this.transform.rotation, this.transform.parent);
-                Invoke("Despawn", 1f);
-            }
-            displayMonsterHP.text = currentHP + "/" + maxHP;
         }
     }
 
@@ -119,6 +97,17 @@ public class Monster : MonoBehaviour
             FindObjectOfType<GameManager>().SpawnMonster();
         }
     }
+    //Fade Out
+    IEnumerator FadeTo(float aValue, float aTime)
+    {
+        float alpha = transform.GetComponent<Image>().color.a;
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
+        {
+            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
+            transform.GetComponent<Image>().color = newColor;
+            yield return null;
+        }
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -133,6 +122,5 @@ public class Monster : MonoBehaviour
             battleReady = true;
             monsterAnimator.SetBool("isWalking", false);
         }
-
     }
 }

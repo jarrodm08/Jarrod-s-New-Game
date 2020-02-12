@@ -1,4 +1,4 @@
-﻿using System;
+﻿//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             {
                 pTransform = UIDic[uiNames[1]]; // Sets MainUI as PARENT
             }
-            else if ( i >= 9 && i < 13)
+            else if (i >= 9 && i < 13)
             {
                 pTransform = UIDic[uiNames[2]]; // Sets UpgradePanelsUI as PARENT
             }
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
             UIDic.Add(uiNames[i], cTransform);
         }
         #endregion
-        
+
         #region Player/Monster
         //Loads Player And Monster Prefabs
         characterPrefabs = Resources.LoadAll<GameObject>("Prefabs/Characters");
@@ -144,15 +144,17 @@ public class GameManager : MonoBehaviour
 
     public void SpawnMonster(Transform spawnPos = null)
     {
+        int monsterNum = Random.Range(0,characterPrefabs.Length-1);
         if (GameData.sessionData.playerData.monsterNum == 1 | spawnPos == null)
         {
-            Instantiate(characterPrefabs[0], UIDic[uiNames[14]].position, UIDic[uiNames[14]].rotation, UIDic[uiNames[14]]); // Spawn First Monster
+            Instantiate(characterPrefabs[monsterNum], UIDic[uiNames[14]].position, UIDic[uiNames[14]].rotation, UIDic[uiNames[14]]); // Spawn First Monster
         }
         else if (GameData.sessionData.playerData.monsterNum > 1 && spawnPos != null)
         {
-            Instantiate(characterPrefabs[0], spawnPos.position, spawnPos.rotation, UIDic[uiNames[14]]); // Respawn
+            Instantiate(characterPrefabs[monsterNum], spawnPos.position, spawnPos.rotation, UIDic[uiNames[14]]); // Respawn
         }
     }
+
 
     private void SpawnPlayer()
     {

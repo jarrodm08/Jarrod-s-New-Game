@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private bool moveToBattle = false;
-    private float runningSpeed = 2f;
+    private float runningSpeed = 10f;
 
     private Animator playerAnimator;
     private AudioSource audioSrc;
