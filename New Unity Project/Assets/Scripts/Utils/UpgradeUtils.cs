@@ -51,7 +51,7 @@ public class UpgradeUtils
             results[0] = Mathf.Round(baseCost * (Mathf.Pow(1.082f, level)) * (Mathf.Pow(1.082f, levelsToBuy()) - 1) / 0.82f * (1 - heroCostMultiplier));
             //Damage
             float currentDamage = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level) * GetImprovementBonus(level)));
-            results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + levelsToBuy()) * GetImprovementBonus(level, true)) - currentDamage);
+            results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + levelsToBuy()) * GetImprovementBonus(level+levelsToBuy(), true)) - currentDamage);
             //Levels Bought
             results[2] = levelsToBuy();
         }
