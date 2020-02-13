@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour
     private void ChangeBuyAmount(string panelName)
     {
         TextMeshProUGUI text = UIDic[panelName].Find("BuyAmtBtn").GetComponentInChildren<TextMeshProUGUI>();
-
         if (text.text == "BUY 1X")
         {
             text.text = "BUY 10X";
@@ -153,7 +152,7 @@ public class GameManager : MonoBehaviour
     private bool changeSprite = false;
     private void SyncUI()
     {
-        UIDic[uiNames[4]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(GameData.sessionData.playerData.gold);
+        UIDic[uiNames[4]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(Mathf.Round(GameData.sessionData.playerData.gold));
         UIDic[uiNames[5]].GetComponentInChildren<TextMeshProUGUI>().text = GameData.sessionData.playerData.stage.ToString();
         UIDic[uiNames[6]].GetComponentInChildren<TextMeshProUGUI>().text = GameData.sessionData.playerData.monsterNum.ToString() + "/10";
         UIDic[uiNames[7]].GetComponentInChildren<TextMeshProUGUI>().text = RoundingUtils.GetShorthand(GameData.sessionData.playerUpgrade.currentDamage);

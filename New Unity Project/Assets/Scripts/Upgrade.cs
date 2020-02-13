@@ -33,7 +33,8 @@ public class Upgrade : MonoBehaviour
         "Damage", // [2]
         
         "Cost", // [3]
-        "DPSIncrease" // [4]
+        "DPSIncrease", // [4]
+        "LevelUpText" // [5]
     };
 
     private void LoadUI()
@@ -54,64 +55,52 @@ public class Upgrade : MonoBehaviour
         else{ upgrade = GameData.sessionData.heroUpgrades[heroUnlockOrder-1]; }
 
         UIDic[uiNames[0]].text = upgradeName; // Set name
+        panelName = this.transform.parent.parent.parent.parent.name; // Name of the panel this upgrade resides in (heroupgrades,playerupgrades ect)
         this.GetComponentInChildren<Button>().onClick.AddListener(BuyUpgrade); // Buy Upgrade Button
-        RefreshUI();
         syncStart = true;
-
     }
 
     //Handles color change of buttons when we can afford them
     private void SyncUI()
     {
+        RefreshUI();
         Image buyBtn = this.GetComponentInChildren<Button>().gameObject.GetComponent<Image>();
-        if (GameData.sessionData.playerData.gold - upgradeCost()  >= 0)
+        if (GameData.sessionData.playerData.gold - calculations[0] >= 0)
         {
             buyBtn.color = new Color32(215, 147, 0, 255);
         }
         else
         {
             buyBtn.color = new Color32(113, 113, 113, 255);
-        }
-        RefreshUI();
+        }  
     }
 
-    #region Calculations
-    private float upgradeCost()
+    private float[] calculations;
+    private string panelName;
+    public void RefreshUI()
     {
-        return UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic["HeroUpgrades"])[0];
-    }
-    private float upgradeDPS()
-    {
-        return UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic["HeroUpgrades"])[1];
-    }
-    private int upgradeLevels()
-    {
-        return (int)UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic["HeroUpgrades"])[2];
-    }
-    #endregion
-
-    private void RefreshUI()
-    {   
+        calculations = UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic[panelName]);
         UIDic[uiNames[1]].text = "(LVL: " + RoundingUtils.GetShorthand(upgrade.currentLevel) + ")";
         UIDic[uiNames[2]].text = "Damage: " + RoundingUtils.GetShorthand(upgrade.currentDamage) + " DPS";
-        UIDic[uiNames[3]].text = RoundingUtils.GetShorthand(upgradeCost());
-        UIDic[uiNames[4]].text = " + " + RoundingUtils.GetShorthand(upgradeDPS()) + " DPS";
+        UIDic[uiNames[3]].text = RoundingUtils.GetShorthand(Mathf.Round(calculations[0]));
+        UIDic[uiNames[4]].text = "+ " + RoundingUtils.GetShorthand(Mathf.Round(calculations[1])) + " DPS";
+        UIDic[uiNames[5]].text = "BUY: " + RoundingUtils.GetShorthand(Mathf.Round(calculations[2]));
     }
 
     private void BuyUpgrade()
     {
-        if (GameData.sessionData.playerData.gold - upgradeCost() >= 0)
+        if (GameData.sessionData.playerData.gold - calculations[0] >= 0)
         {
-            GameData.sessionData.playerData.gold -= upgradeCost();
-            upgrade.currentDamage += upgradeDPS();
-            upgrade.currentLevel += upgradeLevels();
-            RefreshUI();
+            GameData.sessionData.playerData.gold -= calculations[0];
+            upgrade.currentDamage += calculations[1];
+            upgrade.currentLevel += (int)calculations[2];
         }
     }
 
     public void CheatGold()
     {
-        GameData.sessionData.playerData.gold += Mathf.Ceil(FindObjectOfType<Monster>().maxHP * 0.008f + 0.0002f * Mathf.Min(GameData.sessionData.playerData.stage, 150)); // give gold dependant on stage
+        GameData.sessionData.playerData.gold += 81;
+            //FindObjectOfType<Monster>().maxHP * 0.008f + 0.0002f * Mathf.Min(GameData.sessionData.playerData.stage, 150); // give gold dependant on stage
     }
 
     public void NextStage()

@@ -21,6 +21,8 @@ public class UpgradeUtils
         }
         return multiplier;
     }
+
+    private static bool DB = false;
     public static float[] CalculateUpgrade(string name, int level, float baseCost, int heroUnlockOrder, string levelsToBuyString)
     {
         float[] results = new float[3];
@@ -32,46 +34,59 @@ public class UpgradeUtils
             }
             else
             {
-                return GetMaxLevels(name,level,baseCost,heroUnlockOrder,GameData.sessionData.playerData.gold)-1;
+              
+                int lvlTmp = GetMaxLevels(name, level, baseCost, heroUnlockOrder,GameData.sessionData.playerData.gold)-1;
+                if (lvlTmp == 0)
+                {          
+                    return 1;
+                }
+                else
+                {
+                    return lvlTmp;
+                }
             }
         }
 
+        float currentDamage;
+        float nextDamage;
         if (name == "Player")
         {
             //Cost
-            results[0] = Mathf.Round(5 * (Mathf.Pow(1.062f, level + 1) - Mathf.Pow(1.062f, level)) / 0.062f);
+            results[0] = 5 * (Mathf.Pow(1.062f, level + levelsToBuy()) - Mathf.Pow(1.062f, level)) / 0.062f;
             //Damage
-            results[1] = ((level + 1) * GetImprovementBonus(level, true)) - ((level) * GetImprovementBonus(level)); // difference between current damage and what it would be +1 level
-            //Levels Bought
-            results[2] = levelsToBuy();
+            currentDamage = level * GetImprovementBonus(level);
+            nextDamage = (level + levelsToBuy()) * GetImprovementBonus(level + levelsToBuy(), true);            
         }
         else
         {
             //Cost
-            results[0] = Mathf.Round(baseCost * (Mathf.Pow(1.082f, level)) * (Mathf.Pow(1.082f, levelsToBuy()) - 1) / 0.82f * (1 - heroCostMultiplier));
+            results[0] = baseCost * (Mathf.Pow(1.082f, level)) * (Mathf.Pow(1.082f, levelsToBuy()) - 1) / 0.82f * (1 - heroCostMultiplier);
             //Damage
-            float currentDamage = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level) * GetImprovementBonus(level)));
-            results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + levelsToBuy()) * GetImprovementBonus(level+levelsToBuy(), true)) - currentDamage);
-            //Levels Bought
-            results[2] = levelsToBuy();
+            currentDamage = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level) * GetImprovementBonus(level)));
+            nextDamage = (baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + levelsToBuy()) * GetImprovementBonus(level + levelsToBuy(), true));
         }
+
+        //Damage
+        results[1] = nextDamage - currentDamage;
+        //Levels Bought
+        results[2] = levelsToBuy();
+
         return results;
     }
-
     private static int maxLevelIndex = 1;
-    private static float playerGold;
     public static int GetMaxLevels(string name, int level, float baseCost, int heroUnlockOrder, float currentGold)
     {
+        maxLevelIndex = 1;
         CalculateMaxUpgrades(name,level,baseCost,heroUnlockOrder,currentGold);
         return maxLevelIndex;
     }
     private static void CalculateMaxUpgrades(string name, int level, float baseCost, int heroUnlockOrder, float currentGold)
     {
-        playerGold = currentGold;
-        if (playerGold - CalculateUpgrade(name, level, baseCost, heroUnlockOrder, maxLevelIndex.ToString())[0] >= 0)
+        float cost = CalculateUpgrade(name, level, baseCost, heroUnlockOrder, maxLevelIndex.ToString())[0];
+        if (currentGold - cost >= 0)
         {
-            maxLevelIndex++;
-            CalculateMaxUpgrades(name, level, baseCost, heroUnlockOrder, playerGold);
+            maxLevelIndex++;         
+            CalculateMaxUpgrades(name, level, baseCost, heroUnlockOrder, currentGold);
         }
     }
 
