@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5570061686786800700}
   - component: {fileID: 7396631874455420}
   m_Layer: 5
-  m_Name: DamageText
+  m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 4004247060351840959}
   - component: {fileID: 3335781458236022183}
   - component: {fileID: 3932335808400654}
-  - component: {fileID: 4004247059772976844}
+  - component: {fileID: 1400200206}
   m_Layer: 5
   m_Name: Upgrade
   m_TagString: Untagged
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &4004247059772976844
+--- !u!114 &1400200206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,11 +246,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df84d94c464276045b88587e1d4a2dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradeName: Player
-  upgradeCurrentLevel: 1
-  upgradeCurrentDamage: 0
-  upgradeBaseCost: 0
-  heroUnlockOrder: 0
+  upgrade:
+    currentLevel: 0
+    currentDamage: 0
+    unlocked: 0
+  upgradeName: Fluffers
+  heroUnlockOrder: 1
+  baseCost: 30
 --- !u!1 &1786609576616139859
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +388,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Player Name Here
+  m_text: Upgrade Name Here
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
@@ -414,7 +416,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 29.5
+  m_fontSize: 27.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -455,7 +457,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 6276471790288041638}
-    characterCount: 16
+    characterCount: 17
     spriteCount: 0
     spaceCount: 2
     wordCount: 3
@@ -717,7 +719,7 @@ GameObject:
   - component: {fileID: 5605891026618981786}
   - component: {fileID: 6543645040138165165}
   m_Layer: 5
-  m_Name: CostText
+  m_Name: Cost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -872,7 +874,7 @@ GameObject:
   - component: {fileID: 352404235237606861}
   - component: {fileID: 3542545593085949517}
   m_Layer: 5
-  m_Name: LevelText
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1048,10 +1050,10 @@ RectTransform:
   m_Father: {fileID: 4004247060351840959}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -0.000015258789}
-  m_SizeDelta: {x: 0, y: -20}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 35, y: 0}
+  m_SizeDelta: {x: 0, y: 117.664}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &3052855549603321671
 CanvasRenderer:
@@ -1079,7 +1081,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 94bd5298af2b35b43b87daa873bd8dea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 92db5abfacedf7a47884577e08afc5fb, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1114,7 +1116,7 @@ GameObject:
   - component: {fileID: 4115904989530224295}
   - component: {fileID: 6362540590997685310}
   m_Layer: 5
-  m_Name: DPSIncreaseText
+  m_Name: DPSIncrease
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

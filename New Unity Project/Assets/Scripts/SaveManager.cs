@@ -55,7 +55,8 @@ public class GameData
 		playerUpgrade = new UpgradeData();
 		playerUpgrade.currentDamage = 1; // Default damage
 		playerUpgrade.currentLevel = 1;
-		heroUpgrades = new UpgradeData[2]; // set array size to number of upgrades in the game
+
+		heroUpgrades = new UpgradeData[8]; // set array size to number of upgrades in the game
 		for (int i = 0; i < heroUpgrades.Length; i++)
 		{
 			heroUpgrades[i] = new UpgradeData();

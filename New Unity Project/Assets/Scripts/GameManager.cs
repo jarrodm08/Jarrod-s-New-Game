@@ -104,7 +104,37 @@ public class GameManager : MonoBehaviour
             { // For uiNames[9] (HeroUpgrades) Keep locked until we trigger the unlock event
                 btn.onClick.AddListener(() => TogglePanel(UIDic[btn.name].gameObject));
             }
-            UIDic[btn.name].GetComponentInChildren<Button>().onClick.AddListener(() => TogglePanel(UIDic[btn.name].gameObject)); // Set exit button listener
+            UIDic[btn.name].Find("ExitBtn").GetComponent<Button>().onClick.AddListener(() => TogglePanel(UIDic[btn.name].gameObject)); // Set exit button listener
+            UIDic[btn.name].Find("BuyAmtBtn").GetComponent<Button>().onClick.AddListener(() => ChangeBuyAmount(btn.name)); // Set BUY AMOUNT BUTTON
+            buyAmountDic.Add(btn.name, "1");
+        }
+    }
+
+    public Dictionary<string, string> buyAmountDic = new Dictionary<string, string>();
+
+    private void ChangeBuyAmount(string panelName)
+    {
+        TextMeshProUGUI text = UIDic[panelName].Find("BuyAmtBtn").GetComponentInChildren<TextMeshProUGUI>();
+
+        if (text.text == "BUY 1X")
+        {
+            text.text = "BUY 10X";
+            buyAmountDic[panelName] = "10";
+        }
+        else if (text.text == "BUY 10X")
+        {
+            text.text = "BUY 100X";
+            buyAmountDic[panelName] = "100";
+        }
+        else if (text.text == "BUY 100X")
+        {
+            text.text = "BUY MAX";
+            buyAmountDic[panelName] = "MAX";
+        }
+        else if (text.text == "BUY MAX")
+        {
+            text.text = "BUY 1X";
+            buyAmountDic[panelName] = "1";
         }
     }
 

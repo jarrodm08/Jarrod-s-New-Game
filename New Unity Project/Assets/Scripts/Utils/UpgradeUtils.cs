@@ -21,26 +21,60 @@ public class UpgradeUtils
         }
         return multiplier;
     }
-    public static float[] CalculateUpgrade(string name, int level, float baseCost, int heroUnlockOrder)
+    public static float[] CalculateUpgrade(string name, int level, float baseCost, int heroUnlockOrder, string levelsToBuyString)
     {
-        float[] results = new float[2];
+        float[] results = new float[3];
+        int levelsToBuy()
+        {
+            if (levelsToBuyString != "MAX")
+            {
+                return System.Convert.ToInt32(levelsToBuyString);
+            }
+            else
+            {
+                return GetMaxLevels(name,level,baseCost,heroUnlockOrder,GameData.sessionData.playerData.gold)-1;
+            }
+        }
+
         if (name == "Player")
         {
             //Cost
             results[0] = Mathf.Round(5 * (Mathf.Pow(1.062f, level + 1) - Mathf.Pow(1.062f, level)) / 0.062f);
             //Damage
             results[1] = ((level + 1) * GetImprovementBonus(level, true)) - ((level) * GetImprovementBonus(level)); // difference between current damage and what it would be +1 level
+            //Levels Bought
+            results[2] = levelsToBuy();
         }
         else
         {
             //Cost
-            results[0] = Mathf.Round(baseCost * (Mathf.Pow(1.082f, level)) * (Mathf.Pow(1.082f, 1) - 1) / 0.82f * (1 - heroCostMultiplier));
+            results[0] = Mathf.Round(baseCost * (Mathf.Pow(1.082f, level)) * (Mathf.Pow(1.082f, levelsToBuy()) - 1) / 0.82f * (1 - heroCostMultiplier));
             //Damage
             float currentDamage = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level) * GetImprovementBonus(level)));
-            results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + 1) * GetImprovementBonus(level, true)) - currentDamage);
+            results[1] = ((baseCost / 10 * (1 - 23 / 1000 * Mathf.Pow(Mathf.Min(heroUnlockOrder, 34), Mathf.Min(heroUnlockOrder, 34))) * (level + levelsToBuy()) * GetImprovementBonus(level, true)) - currentDamage);
+            //Levels Bought
+            results[2] = levelsToBuy();
         }
         return results;
     }
+
+    private static int maxLevelIndex = 1;
+    private static float playerGold;
+    public static int GetMaxLevels(string name, int level, float baseCost, int heroUnlockOrder, float currentGold)
+    {
+        CalculateMaxUpgrades(name,level,baseCost,heroUnlockOrder,currentGold);
+        return maxLevelIndex;
+    }
+    private static void CalculateMaxUpgrades(string name, int level, float baseCost, int heroUnlockOrder, float currentGold)
+    {
+        playerGold = currentGold;
+        if (playerGold - CalculateUpgrade(name, level, baseCost, heroUnlockOrder, maxLevelIndex.ToString())[0] >= 0)
+        {
+            maxLevelIndex++;
+            CalculateMaxUpgrades(name, level, baseCost, heroUnlockOrder, playerGold);
+        }
+    }
+
     public static float GetTotalHeroDPS()
     {
         float dps = 0;
@@ -58,7 +92,7 @@ public class UpgradeUtils
             Upgrade hero = upgrades[i - upgrades.Length - 1];
             if (hero.gameObject.activeSelf == false)
             {
-                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName, hero.upgrade.currentLevel - 1, hero.baseCost, hero.heroUnlockOrder)[0] * 0.10f || GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked == true)
+                if (GameData.sessionData.playerData.gold >= CalculateUpgrade(hero.upgradeName, hero.upgrade.currentLevel - 1, hero.baseCost, hero.heroUnlockOrder,"1")[0] * 0.10f || GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked == true)
                 {
                     hero.gameObject.SetActive(true);
                     GameData.sessionData.heroUpgrades[hero.heroUnlockOrder - 1].unlocked = true;
@@ -70,7 +104,7 @@ public class UpgradeUtils
 
     public UpgradeUtils()
     {
-        InitImprovementBonus();
+        InitImprovementBonus();       
     }
 
     private static Dictionary<int, int> improvementBonusDic;

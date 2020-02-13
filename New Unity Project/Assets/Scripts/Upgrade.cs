@@ -57,6 +57,7 @@ public class Upgrade : MonoBehaviour
         this.GetComponentInChildren<Button>().onClick.AddListener(BuyUpgrade); // Buy Upgrade Button
         RefreshUI();
         syncStart = true;
+
     }
 
     //Handles color change of buttons when we can afford them
@@ -71,16 +72,21 @@ public class Upgrade : MonoBehaviour
         {
             buyBtn.color = new Color32(113, 113, 113, 255);
         }
+        RefreshUI();
     }
 
     #region Calculations
     private float upgradeCost()
     {
-        return UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder)[0];
+        return UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic["HeroUpgrades"])[0];
     }
     private float upgradeDPS()
     {
-        return UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder)[1];
+        return UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic["HeroUpgrades"])[1];
+    }
+    private int upgradeLevels()
+    {
+        return (int)UpgradeUtils.CalculateUpgrade(upgradeName, upgrade.currentLevel, baseCost, heroUnlockOrder, FindObjectOfType<GameManager>().buyAmountDic["HeroUpgrades"])[2];
     }
     #endregion
 
@@ -98,13 +104,18 @@ public class Upgrade : MonoBehaviour
         {
             GameData.sessionData.playerData.gold -= upgradeCost();
             upgrade.currentDamage += upgradeDPS();
-            upgrade.currentLevel += 1;
+            upgrade.currentLevel += upgradeLevels();
             RefreshUI();
         }
     }
 
     public void CheatGold()
     {
-        GameData.sessionData.playerData.gold += 500;
+        GameData.sessionData.playerData.gold += Mathf.Ceil(FindObjectOfType<Monster>().maxHP * 0.008f + 0.0002f * Mathf.Min(GameData.sessionData.playerData.stage, 150)); // give gold dependant on stage
+    }
+
+    public void NextStage()
+    {
+        GameData.sessionData.playerData.stage += 5;
     }
 }
